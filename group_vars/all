@@ -1,0 +1,40 @@
+---
+vm_image_user: fedora
+vm_image_url: https://download.fedoraproject.org/pub/fedora/linux/releases/33/Cloud/x86_64/images/Fedora-Cloud-Base-33-1.2.x86_64.qcow2
+vm_image_sha256: 7a2b3cc3bb3a92ce927e685d33efe8efd75577efbe207b267cb66f68afae7ce9
+
+# What container runtime do we use?
+# valid values:
+# - containerd (cgroup-v1)
+# - crio      (crio with cgroup-v1)
+# - crio_crun (crio with cgroup-v2)
+#container_runtime: crio
+container_runtime: containerd
+
+# crio version (you can see available version by 'dnf module list cri-o')
+#crio_version: "nightly"
+crio_version: "1.20"
+
+# containerd release URL
+containerd_url: "https://github.com/containerd/containerd/releases/download/v1.4.4/cri-containerd-cni-1.4.4-linux-amd64.tar.gz"
+
+# CNI reference plugin URL
+cni_plugins_url: "https://github.com/containernetworking/plugins/releases/download/v0.9.1/cni-plugins-linux-amd64-v0.9.1.tgz"
+
+# Pod net work CIDR
+pod_network_cidr: "10.244.0.0"
+
+# Kube Version
+# Accepts "latest" or the version part of an RPM (typically based on the kubelet RPM).
+# For example if you were to look at `yum search kubelet --showduplicates`
+# You'd see things like "kubelet-1.7.5-0.x86_64"
+# You'd use "1.7.5-0" here, such as:
+# kube_version: 1.7.5-0
+# The default is... "latest"
+kube_version: "latest"
+
+# Kubectl proxy.
+kubectl_proxy_port: 8088
+
+#ovn_image_repo: "docker.io/ovnkube/ovn-daemonset-u:latest"
+ovn_image_repo: "docker.io/nfvpe/ovn-daemonset-u:latest"

@@ -1,0 +1,16 @@
+# Creates a systemd unit and starts kubectl proxy.
+# https://kubernetes.io/docs/user-guide/kubectl/v1.8/#proxy
+
+- name: Template kubectl proxy systemd unit
+  template:
+    src: kubectl-proxy.service.j2
+    dest: /etc/systemd/system/kubectl-proxy.service
+    mode: 0644
+  register: template_kubectlproxy_unit
+  notify: template_kubectlproxy_unit_changed
+
+- name: Always ensure proxy is started
+  systemd:
+    name: kubectl-proxy
+    state: started
+    daemon_reload: yes

@@ -1,0 +1,9 @@
+{% for host in host_ips %}
+Host	{{host}}
+  Hostname {{host_ips[host]}}
+  User {{ vm_image_user }}
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+
+{% endfor %}
+

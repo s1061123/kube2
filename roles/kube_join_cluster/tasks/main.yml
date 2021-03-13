@@ -1,0 +1,35 @@
+---
+# - debug: "msg={{ kubeadm_join_command }}"
+
+- name: Set skip_preflight_checks args if need be.
+  set_fact:
+    arg_crio: "--ignore-preflight-errors=all"
+  when: skip_preflight_checks | default(false)
+
+- name: Set cri-o args if need be.
+  set_fact:
+    arg_crio: "--ignore-preflight-errors=all --cri-socket=\\/var\\/run\\/crio\\/crio.sock"
+  when: container_runtime == "crio" or container_runtime == "crio_crun"
+
+- name: Change the given command
+  shell: >
+    set -o pipefail && echo {{ kubeadm_join_command }} | sed -e 's/join/join {{ arg_crio }} /'
+  register: modified_command
+  when: container_runtime == "crio"  or (skip_preflight_checks | default(false))
+
+- name: Change the kubeadm_join_command fact when crio
+  set_fact:
+    kubeadm_join_command: "{{ modified_command.stdout }}"
+  when: container_runtime == "crio"  or (skip_preflight_checks | default(false))
+
+- name: Join each node to the master with the join command
+  shell: >
+    {{ kubeadm_join_command }}
+  args:
+    creates: /etc/.kubeadm-joined
+
+- name: Mark the nodes as joined
+  file:
+    path: /etc/.kubeadm-joined
+    state: directory
+    mode: 0644

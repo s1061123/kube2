@@ -1,0 +1,14 @@
+---
+- hosts: master, nodes
+  become: true
+  become_user: root
+  tasks:
+    - name: Install prerequisites
+      dnf:
+        name: ["patch", "git", "openvswitch"]
+        state: present
+    - name: enable openvswitch
+      systemd:
+        name: openvswitch
+        enabled: yes
+        state: started

@@ -1,0 +1,4 @@
+- hosts: virthost
+  connection: local
+  roles:
+   - role: vm_provision

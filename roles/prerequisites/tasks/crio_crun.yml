@@ -1,0 +1,55 @@
+---
+- name: enable crio module
+  command: dnf -y module enable cri-o:{{ crio_version }} # noqa no-changed-when
+
+- name: install crio from package
+  dnf:
+    name: crio
+    state: present
+
+- name: configure crio to use crun
+  lineinfile: >-
+    dest='/etc/crio/crio.conf'
+    state=present
+    backrefs=yes
+    regexp='crio.runtime.runtimes.runc'
+    line='[crio.runtime.runtimes.crun]'
+
+- name: configure crio to use crun
+  lineinfile: >-
+    dest='/etc/crio/crio.conf'
+    state=present
+    backrefs=yes
+    regexp='^default_runtime = "runc"$'
+    line='default_runtime = "crun"'
+
+- name: configure crio to use crun
+  lineinfile: >-
+    dest='/etc/crio/crio.conf'
+    state=present
+    backrefs=yes
+    regexp='^runtime_path = ""$'
+    line='runtime_path = "/usr/bin/crun"'
+
+- name: delete cni directory once
+  file:
+    path: /etc/cni/net.d
+    state: absent
+    owner: root
+    group: root
+    mode: 0755
+
+- name: create work directory
+  file:
+    path: /etc/cni/net.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: enable systemd
+  systemd:
+    name: crio
+    enabled: yes
+    daemon_reload: yes
+    state: started

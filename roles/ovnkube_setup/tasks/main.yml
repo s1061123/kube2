@@ -1,0 +1,84 @@
+- name: setup ovn-kubernetes
+  block:
+    - name: mkdir
+      file:
+        path: ${HOME}/work/src/github.com/ovn-org
+        state: directory
+
+    - name: git clone # noqa git-latest
+      git:
+        repo: "{{ ovn_kubernetes_repo | default('https://github.com/ovn-org/ovn-kubernetes') }}"
+        dest: ${HOME}/work/src/github.com/ovn-org/ovn-kubernetes
+        version: "{{ ovn_kubernetes_branch | default('master') }}"
+
+    - name: set kube_api_server
+      set_fact:
+        kube_api_server: "https://{{ ansible_default_ipv4.address }}:6443"
+
+    - name: overwrite kube_api_server in case of HA
+      set_fact:
+        kube_api_server: "https://{{ hostvars[groups['lb'][0]]['ansible_host'] }}:6443"
+      when: groups.master_slave is defined and groups.master_slave|length > 0
+
+    - name: create ovn yaml file
+      shell: |
+        ./daemonset.sh --image={{ ovn_image_repo }} \
+                --net-cidr=10.244.0.0/16 \
+                --svc-cidr=10.96.0.0/12 \
+                --gateway-mode="local" \
+                --k8s-apiserver={{ kube_api_server }} \
+                --master-loglevel="{{ ovnkube_master_loglevel | default('5') }}" \
+                --node-loglevel="{{ ovnkube_node_loglevel | default('4') }}" \
+                --ovn-loglevel-northd="{{ ovn_loglevel_northd | default('-vfile:info') }}" \
+                --ovn-loglevel-nb="{{ ovn_loglevel_nb | default('-vfile:info') }}" \
+                --ovn-loglevel-sb="{{ ovn_loglevel_sb | default('-vfile:info') }}" \
+                --ovn-loglevel-controller="{{ ovn_loglevel_controller | default('-vfile:info') }}" \
+                --ovn-loglevel-nbctld="{{ ovn_loglevel_nbctld | default('-vfile:info') }}"
+      args:
+        chdir: $HOME/work/src/github.com/ovn-org/ovn-kubernetes/dist/images
+
+- name: Add label to master node for ovn raft mode
+  command: kubectl label nodes {{ item }} k8s.ovn.org/ovnkube-db=true
+  with_items:
+    - "{{ groups['master'] }}"
+    - "{{ groups['master_slave'] }}"
+  when: enable_ovn_raft is defined and enable_ovn_raft
+
+# see https://github.com/ovn-org/ovn-kubernetes/pull/1351 for the detail
+- name: Patch ovnkube-node yaml
+  patch:
+    src: ovnkube-node.diff
+    dest: $HOME/work/src/github.com/ovn-org/ovn-kubernetes/dist/yaml/ovnkube-node.yaml
+
+- name: Add ovn-kube ymls
+  command: kubectl create -f {{ item }}
+  args:
+    chdir: $HOME/work/src/github.com/ovn-org/ovn-kubernetes/dist/yaml
+  with_items:
+    - ovn-setup.yaml
+    - ovs-node.yaml
+    - ovnkube-db-raft.yaml
+    - ovnkube-master.yaml
+    - ovnkube-node.yaml
+  when: enable_ovn_raft is defined and enable_ovn_raft
+
+- name: Add ovn-kube ymls
+  command: kubectl create -f {{ item }}
+  args:
+    chdir: $HOME/work/src/github.com/ovn-org/ovn-kubernetes/dist/yaml
+  with_items:
+    - ovn-setup.yaml
+    - ovs-node.yaml
+    - ovnkube-db.yaml
+    - ovnkube-master.yaml
+    - ovnkube-node.yaml
+  when: enable_ovn_raft is not defined and not enable_ovn_raft
+
+- name: Patch coredns # noqa no-changed-when
+  command: |
+    kubectl -n kube-system patch deploy coredns -p \
+    '{"spec":{"template":{"metadata":{"annotations": {"kubernetes.io/egress-bandwidth": "1M", "kubernetes.io/ingress-bandwidth": "1M" }}}}}'
+
+- name: Stop kube-proxy daemonset  # noqa no-changed-when
+  command: kubectl -n kube-system delete ds kube-proxy
+  failed_when: false

@@ -1,0 +1,45 @@
+# Network type (2nics or default)
+network_type: 2nics
+
+default_ram_mb: 16384
+default_cpus: 4
+
+ssh_pub_key: ~/.ssh/id_rsa.pub
+ssh_private_key: ~/.ssh/id_rsa
+
+# Define all VM's that need to be created and their respective roles.
+# There are three roles user can defined
+#  - master: Kubernets primary master node
+#  - master_slave: Kubernets secondary master nodes that joins primary master
+#  - nodes : Kubernetes nodes (worker)
+virtual_machines:
+  - name: kube-master1
+    node_type: master
+    cpus: 8
+    memory: 32768
+    eth1_ip: 10.1.1.1
+  - name: kube-node-1
+    cpus: 4
+    node_type: nodes
+  - name: kube-node-2
+    cpus: 4
+    node_type: nodes
+virtual_machines_unused: # kinds of comment out
+  - name: kube-lb
+    cpus: 2
+    node_type: lb
+    memory: 8192
+  - name: kube-master2
+    node_type: master_slave
+    cpus: 8
+    memory: 32768
+    eth1_ip: 10.1.1.2
+  - name: kube-master3
+    node_type: master_slave
+    cpus: 8
+    memory: 32768
+    eth1_ip: 10.1.1.3
+
+# terraform release url
+terraform_url: https://releases.hashicorp.com/terraform/0.14.7/terraform_0.14.7_linux_amd64.zip
+terraform_libvirt_url: https://github.com/dmacvicar/terraform-provider-libvirt/releases/download/v0.6.3/terraform-provider-libvirt-0.6.3+git.1604843676.67f4f2aa.Fedora_32.x86_64.tar.gz

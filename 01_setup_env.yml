@@ -1,0 +1,18 @@
+# install libvirt
+- hosts: virthost
+  connection: local
+  become: true
+  become_user: root
+  roles:
+   - role: ansible-role-libvirt-host
+  tasks:
+    - name: install required package
+      package:
+        name: genisoimage
+        state: present
+
+# install terraform under ./tf/
+- hosts: virthost
+  connection: local
+  roles:
+   - role: terraform_install

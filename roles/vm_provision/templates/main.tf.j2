@@ -1,0 +1,60 @@
+terraform {
+  required_version = ">= 0.13"
+  required_providers {
+    libvirt = {
+      version = ">= 0.6.2"
+      source = "dmacvicar/libvirt"
+    }
+  }
+}
+
+provider "libvirt" {
+  uri = "qemu:///system"
+}
+
+{% if network_type is defined and network_type == "2nics" %}
+// if 2nic is defined
+resource "libvirt_network" "multus_eth1" {
+  name = "multus_eth1"
+
+  # mode can be: "nat" (default), "none", "route", "bridge"
+  mode = "none"
+  addresses = ["10.1.1.0/24"]
+}
+{% endif %}
+{% for node in virtual_machines %}
+{% set vm_type = vm_simple %}
+{% if network_type is defined and network_type == "2nics" %}
+  {% if node['eth1_ip'] is defined %}
+    {% set vm_type = "vm_2nics_ip" %}
+  {% else %}
+    {% set vm_type = "vm_2nics" %}
+  {% endif %}
+{% endif %}
+
+module "{{ node['name'] }}" {
+  // fallthrough (1nic)
+  source   = "./modules/{{ vm_type }}"
+  name = "{{ node['name'] }}"
+{% if node['cpus'] is defined %}
+  vcpu = {{ node['cpus'] }}
+{% else %}
+  vcpu = {{ default_cpus }}
+{% endif %}
+{% if node['memory'] is defined %}
+  memory = {{ node['memory'] }}
+{% else %}
+  memory = {{ default_ram_mb }}
+{% endif %}
+  base_image = "images/{{ vm_image_url | basename }}"
+  user = "{{ vm_image_user }}"
+  ssh_pub_key = file("{{ ssh_pub_key }}")
+{% if vm_type == "vm_2nics_ip" %}
+  eth1_addr = "{{ node['eth1_ip'] }}"
+{% endif %}
+}
+
+output "{{ node['name'] }}" {
+  value = flatten(module.{{ node['name'] }}.ips)
+}
+{% endfor %}

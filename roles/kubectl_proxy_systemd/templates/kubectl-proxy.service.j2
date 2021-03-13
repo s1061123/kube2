@@ -1,0 +1,11 @@
+[Unit]
+Description=kubectl-proxy
+
+[Service]
+User={{ kubectl_user }}
+Group={{ kubectl_group }}
+ExecStart=/bin/bash -c "source {{ kubectl_home }}/.bashrc && /usr/bin/kubectl proxy --port={{ kubectl_proxy_port }}"
+
+[Install]
+WantedBy=multi-user.target
+

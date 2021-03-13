@@ -1,0 +1,123 @@
+---
+- name: Upgrade all packages
+  package:
+    name: "*"
+    state: latest # noqa package-latest
+  tags:
+    - never
+    - update_packages
+
+- name: update boot kernel to latest one
+  command: grubby --set-default-index=0 # noqa no-changed-when
+  tags:
+    - never
+    - update_packages
+
+- name: reboot vm
+  reboot:
+    reboot_timeout: 600
+  tags:
+    - never
+    - update_packages
+
+- name: Put SELinux in permissive mode
+  when: container_runtime == "containerd"
+  block:
+    - name: set selinux permissive
+      selinux:
+        policy: targeted
+        state: permissive
+    - name: edit /etc/selinux/config
+      lineinfile: >-
+        dest='/etc/selinux/config'
+        state=present
+        backrefs=yes
+        regexp='^SELINUX=enforcing$'
+        line='SELINUX=permissive'
+
+- name: change cgroup to v1
+  command: grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0" # noqa no-changed-when
+  when: container_runtime != "crio_crun"
+
+- name: reboot vm
+  reboot:
+    reboot_timeout: 600
+  when: container_runtime != "crio_crun"
+
+- name: copy sysctl file (k8s.conf)
+  copy:
+    src: "{{ role_path }}/files/k8s.conf"
+    dest: "/etc/sysctl.d/k8s.conf"
+    mode: 0644
+
+- name: copy sysctl file (99-kubernetes-cri.conf)
+  copy:
+    src: "{{ role_path }}/files/99-kubernetes-cri.conf"
+    dest: "/etc/sysctl.d/99-kubernetes-cri.conf"
+    mode: 0644
+
+- name: reload sysctl
+  command: sysctl --system # noqa no-changed-when
+
+- name: load required kernel modules(overlay)
+  command: modprobe overlay # noqa no-changed-when
+
+- name: load required kernel modules(br_netfilter)
+  command: modprobe br_netfilter # noqa no-changed-when
+
+- name: install crun
+  dnf:
+    name: 'crun'
+    state: present
+  when: container_runtime == "crio_crun"
+
+- name: install container runtime
+  block:
+    - include: containerd.yml
+      when: container_runtime == "containerd"
+    - include: crio_crun.yml
+      when: container_runtime == "crio_crun"
+    - include: crio.yml
+      when: container_runtime != "containerd"
+
+- name: install cni plugins
+  block:
+    - name: create cni plugin directory
+      file:
+        path: /opt/cni/bin
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+    - name: install cni plugins
+      unarchive:
+        src: "{{ cni_plugins_url }}"
+        dest: /opt/cni/bin
+        mode: 0755
+        remote_src: yes
+
+- name: copy kubernetes.repo
+  copy:
+    src: "{{ role_path }}/files/kubernetes.repo"
+    dest: "/etc/yum.repos.d/kubernetes.repo"
+    mode: 0644
+
+- name: install kubernetes packages
+  dnf:
+    name: ['kubelet', 'kubeadm', 'kubectl']
+    disable_excludes: kubernetes
+    state: present
+
+- name: configure cgroup-driver to systemd
+  lineinfile: >-
+    dest='/etc/sysconfig/kubelet'
+    state=present
+    backrefs=yes
+    regexp='^KUBELET_EXTRA_ARGS=$'
+    line='KUBELET_EXTRA_ARGS=--cgroup-driver=systemd'
+
+- name: enable kubelet
+  systemd:
+    name: kubelet
+    enabled: yes
+    state: started

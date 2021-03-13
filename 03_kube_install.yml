@@ -1,0 +1,66 @@
+---
+- hosts: all
+  tasks:
+    - name: wait for startup
+      wait_for_connection:
+        delay: 20
+        timeout: 120
+
+- hosts: lb
+  become: true
+  become_user: root
+  roles:
+    - { role: lb_setup }
+
+- hosts: master, master_slave, nodes
+  become: true
+  become_user: root
+  roles:
+    - role: prerequisites
+
+- hosts: master
+  become: true
+  become_user: root
+  tasks: []
+  roles:
+    - { role: kube_init }
+    - { role: kubectl_configure }
+
+- hosts: master_slave
+  become: true
+  become_user: root
+  pre_tasks:
+    - name: Get cert related args from master
+      set_fact:
+        kubeadm_cert_key: "{{ hostvars[groups['master'][0]]['kubeadm_cert_key'] }}"
+    - name: Get kubeadm_join_command from master
+      set_fact:
+        kubeadm_join_command: "{{ hostvars[groups['master'][0]]['kubeadm_join_command'] }}"
+  tasks: []
+  roles:
+    - { role: kube_master_join_cluster }
+    - { role: kubectl_configure }
+
+# without become.
+- hosts: master, master_slave
+  tasks: []
+  roles:
+    - { role: kube_niceties }
+
+- hosts: nodes
+  become: true
+  become_user: root
+  pre_tasks:
+    - name: Get kubeadm_join_command from master
+      set_fact:
+        kubeadm_join_command: "{{ hostvars[groups['master'][0]]['kubeadm_join_command'] }}"
+  tasks: []
+  roles:
+    - { role: kube_join_cluster }
+
+- hosts: master
+  become: true
+  become_user: root
+  tasks: []
+  roles:
+    - { role: kubectl_proxy_systemd, when: kubectl_proxy_port is undefined}

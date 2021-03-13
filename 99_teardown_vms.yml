@@ -1,0 +1,9 @@
+- hosts: virthost
+  connection: local
+  tasks:
+    # cd tf; ./terraform destroy -auto-approve
+    - name: tearing down vms
+      terraform:
+        project_path: "{{ playbook_dir }}/tf"
+        binary_path: "{{ playbook_dir }}/tf/terraform"
+        state: absent

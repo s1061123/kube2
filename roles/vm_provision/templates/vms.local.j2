@@ -1,0 +1,16 @@
+{% for grouper, list in virtual_machines|groupby('node_type') %}
+{% for server in list %}
+{{ server.name }} ansible_host={{ host_ips[server.name] }}
+{% endfor %}
+{% endfor %}
+
+{% for grouper, list in virtual_machines|groupby('node_type') %}
+[{{ grouper }}]
+{% for server in list %}
+{{ server.name }}
+{% endfor %}
+
+{% endfor %}
+[all:vars]
+ansible_user={{ vm_image_user }}
+ansible_ssh_private_key_file={{ ssh_private_key }}

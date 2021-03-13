@@ -1,0 +1,40 @@
+---
+- name: install containerd
+  unarchive:
+    src: "{{ containerd_url }}"
+    dest: /
+    mode: 0755
+    remote_src: yes
+
+- name: make /etc/containerd
+  file:
+    path: /etc/containerd
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: create defaut config
+  shell: "set -o pipefail; containerd config default | sudo tee /etc/containerd/config.toml" # noqa no-changed-when
+
+- name: delete cni directory once
+  file:
+    path: /etc/cni/net.d
+    state: absent
+    owner: root
+    group: root
+    mode: 0755
+
+- name: create work directory
+  file:
+    path: /etc/cni/net.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: enable systemd
+  systemd:
+    name: containerd
+    enabled: yes
+    state: started
