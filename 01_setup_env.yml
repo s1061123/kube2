@@ -1,6 +1,5 @@
 # install libvirt
 - hosts: virthost
-  connection: local
   become: true
   become_user: root
   roles:
@@ -13,6 +12,5 @@
 
 # install terraform under ./tf/
 - hosts: virthost
-  connection: local
   roles:
    - role: terraform_install
