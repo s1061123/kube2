@@ -6,8 +6,8 @@
    - role: ansible-role-libvirt-host
   tasks:
     - name: install required package
-      package:
-        name: genisoimage
+      dnf:
+        name: [ "genisoimage", "jq" ]
         state: present
 
 # install terraform under ./tf/

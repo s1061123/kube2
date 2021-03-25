@@ -8,14 +8,14 @@
 - name: copy modules
   copy:
     src: "{{ role_path }}/files/modules"
-    dest: "{{ ansible_env.HOME }}/tf"
+    dest: "{{ terraform_work }}"
     mode: 0755
   tags: vm_create
 
 - name: generate main.tf
   template:
     src: main.tf.j2
-    dest: "{{ ansible_env.HOME }}/tf/main.tf"
+    dest: "{{ terraform_work }}/main.tf"
     mode: 0644
   tags: vm_create
 
@@ -49,21 +49,16 @@
 
 - name: setup vm
   terraform:
-    project_path: "{{ ansible_env.HOME }}/tf"
-    binary_path: "{{ ansible_env.HOME }}/tf/terraform"
+    project_path: "{{ terraform_work }}"
+    binary_path: "{{ terraform_work }}/terraform"
     state: present
     force_init: true
   tags: vm_create
 
-- name: Install jq
-  dnf:
-    name: jq
-    state: latest
-
 - name: get vm ips
   shell: "set -o pipefail; ./terraform output -json | jq 'map_values(.value[0])'"
   args:
-    chdir: "{{ ansible_env.HOME }}/tf"
+    chdir: "{{ terraform_work }}"
   changed_when: False
   register: host_ips_out
 

@@ -1,6 +1,9 @@
 # Network type (2nics or default)
 network_type: 2nics
 
+#terraform_work: "{{ ansible_env.HOME }}/tf"
+terraform_work: "{{ playbook_dir }}/tf"
+
 default_ram_mb: 16384
 default_cpus: 4
 
@@ -21,10 +24,10 @@ virtual_machines:
   - name: kube-node-1
     cpus: 4
     node_type: nodes
+virtual_machines_unused: # kinds of comment out
   - name: kube-node-2
     cpus: 4
     node_type: nodes
-virtual_machines_unused: # kinds of comment out
   - name: kube-lb
     cpus: 2
     node_type: lb

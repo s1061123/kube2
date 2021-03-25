@@ -1,0 +1,30 @@
+- name: Install golang and build deps on Fedora
+  dnf:
+    name: ['golang', 'libvirt', 'libvirt-devel']
+    state: latest
+
+- name: create terraform libvirt provider source directory
+  file:
+    path: "/usr/src/terraform-provider-libvirt"
+    state: directory
+    owner: "{{ ansible_env.USER }}"
+    group: "{{ ansible_env.USER }}"
+    mode: 0755
+
+- name: clone libvirt provider
+  git:
+    repo: https://github.com/dmacvicar/terraform-provider-libvirt.git
+    dest: /usr/src/terraform-provider-libvirt
+    depth: 1
+    version: v0.6.3
+
+- name: build libvirt provider from source
+  make:
+    chdir: /usr/src/terraform-provider-libvirt
+
+- name: copy terraform-provider-libvirt binary into place.
+  copy:
+    src: "/usr/src/terraform-provider-libvirt/terraform-provider-libvirt"
+    dest: "{{ ansible_env.HOME }}/.local/share/terraform/plugins/registry.terraform.io/dmacvicar/libvirt/0.6.3/linux_amd64/terraform-provider-libvirt"
+    remote_src: true
+    force: yes

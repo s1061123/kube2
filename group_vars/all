@@ -11,8 +11,10 @@ vm_additional_pkgs:
 # - containerd (cgroup-v1)
 # - crio      (crio with cgroup-v1)
 # - crio_crun (crio with cgroup-v2)
+# note: other value makes to skip install container runtime
 #container_runtime: crio
 container_runtime: containerd
+#container_runtime: skip
 
 # crio version (you can see available version by 'dnf module list cri-o')
 #crio_version: "nightly"

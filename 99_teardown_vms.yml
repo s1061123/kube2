@@ -3,6 +3,6 @@
     # cd tf; ./terraform destroy -auto-approve
     - name: tearing down vms
       terraform:
-        project_path: "{{ ansible_env.HOME }}/tf"
-        binary_path: "{{ ansible_env.HOME }}/tf/terraform"
+        project_path: "{{ terraform_work }}"
+        binary_path: "{{ terraform_work }}/terraform"
         state: absent
