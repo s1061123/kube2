@@ -38,3 +38,6 @@ kubectl_proxy_port: 8088
 
 #ovn_image_repo: "docker.io/ovnkube/ovn-daemonset-u:latest"
 ovn_image_repo: "docker.io/nfvpe/ovn-daemonset-u:latest"
+
+# Optionally build the dmacvicar/libvirt from source
+build_libvirt_provider: false
