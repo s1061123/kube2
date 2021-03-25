@@ -3,6 +3,9 @@ vm_image_user: fedora
 vm_image_url: https://download.fedoraproject.org/pub/fedora/linux/releases/33/Cloud/x86_64/images/Fedora-Cloud-Base-33-1.2.x86_64.qcow2
 vm_image_sha256: 7a2b3cc3bb3a92ce927e685d33efe8efd75577efbe207b267cb66f68afae7ce9
 
+vm_additional_pkgs:
+  - "sshfs"
+
 # What container runtime do we use?
 # valid values:
 # - containerd (cgroup-v1)
@@ -32,6 +35,13 @@ pod_network_cidr: "10.244.0.0"
 # kube_version: 1.7.5-0
 # The default is... "latest"
 kube_version: "latest"
+
+# Kube RPM Version (i.e. suffix of RPM package)
+# Accepts "" (for latest) or the version part of an RPM (typically based on the kubelet RPM).
+# For example if you were to look at `dnf --showduplicates  list kubelet`
+# You'd use "1.19.9-0" here, such as (don't miss '-' at the beginning!) :
+# Default: "" (use latest)
+#kube_rpm_version: "-1.19.9-0"
 
 # Kubectl proxy.
 kubectl_proxy_port: 8088

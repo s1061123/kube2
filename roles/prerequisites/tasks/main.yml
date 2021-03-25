@@ -1,6 +1,6 @@
 ---
 - name: Upgrade all packages
-  package:
+  dnf:
     name: "*"
     state: latest # noqa package-latest
   tags:
@@ -20,6 +20,12 @@
     - never
     - update_packages
 
+- name: Add additional packages
+  dnf:
+    name: "{{ vm_additional_pkgs }}"
+    state: present
+  when: vm_additional_pkgs is defined
+
 - name: Put SELinux in permissive mode
   when: container_runtime == "containerd"
   block:
@@ -34,6 +40,14 @@
         backrefs=yes
         regexp='^SELINUX=enforcing$'
         line='SELINUX=permissive'
+
+- name: remove zram-generator
+  dnf:
+    name: zram-generator
+    state: absent
+
+- name: disable swap
+  command: swapoff -a # noqa no-changed-when
 
 - name: change cgroup to v1
   command: grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0" # noqa no-changed-when
@@ -104,7 +118,7 @@
 
 - name: install kubernetes packages
   dnf:
-    name: ['kubelet', 'kubeadm', 'kubectl']
+    name: ['kubelet{{ kube_rpm_version | default("") }}', 'kubeadm{{ kube_rpm_version | default("") }}', 'kubectl{{ kube_rpm_version | default("") }}']
     disable_excludes: kubernetes
     state: present
 
