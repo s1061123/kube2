@@ -1,8 +1,8 @@
 # Network type (2nics or default)
 network_type: 2nics
 
-#terraform_work: "{{ ansible_env.HOME }}/tf"
-terraform_work: "{{ playbook_dir }}/tf"
+#terraform_workdir: "{{ ansible_env.HOME }}/tf"
+terraform_workdir: "{{ playbook_dir }}/tf"
 
 default_ram_mb: 16384
 default_cpus: 4

@@ -11,14 +11,14 @@
   command: grubby --set-default-index=0 # noqa no-changed-when
   tags:
     - never
-    - update_packages
+    - update_kernel
 
 - name: reboot vm
   reboot:
     reboot_timeout: 600
   tags:
     - never
-    - update_packages
+    - update_kernel
 
 - name: Add additional packages
   dnf:

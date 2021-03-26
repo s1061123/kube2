@@ -12,3 +12,7 @@
         name: openvswitch
         enabled: yes
         state: started
+
+- hosts: master
+  roles:
+    - role: ovnkube_setup
