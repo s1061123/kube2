@@ -30,6 +30,7 @@ labmachine
 Additionally, set some extra variables to re-use a key which can be used on your remote virthost:
 
 ```
+terraform_workdir: "/home/user/tf"
 ssh_pub_key: /remoteuser/.ssh/id_vm_rsa.pub
 use_local_sshkey_path: /home/user/.ssh/id_vm_rsa.pub
 use_local_sshprivatekey_path: /home/user/.ssh/id_vm_rsa
@@ -42,7 +43,7 @@ You may store these in a file, for example the inventory in `inventory/virthost.
 ansible-playbook -i ./inventory/virthost.inventory -e "@./inventory/extra-vars.yml" 01_setup_env.yml
 ```
 
-Here, `use_local_sshkey_path` is a path to an SSH public key on the same host which is running the playbook. There is also a reciprocal private key, `use_local_sshprivatekey_path`. The `ssh_pub_key` is the path where this public key will be copied to on the virthost.
+Here, `use_local_sshkey_path` is a path to an SSH public key on the same host which is running the playbook. There is also a reciprocal private key, `use_local_sshprivatekey_path`. The `ssh_pub_key` is the path where this public key will be copied to on the virthost. `terraform_workdir` is the workdir for Terraform, and should be the path where you'd like to store terraform on your remote host.
 
 Additionally, an SSH proxy is configured, replace `YOUR-VIRTHOST` with the IP and hostname of your virthost.
 

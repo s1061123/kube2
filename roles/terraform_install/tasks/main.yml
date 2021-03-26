@@ -1,7 +1,7 @@
 ---
 - name: delete work directory
   file:
-    path: "{{ terrafom_work }}"
+    path: "{{ terraform_workdir }}"
     state: absent
     owner: "{{ ansible_env.USER }}"
     group: "{{ ansible_env.USER }}"
@@ -9,7 +9,7 @@
 
 - name: create work directory
   file:
-    path: "{{ terrafom_work }}"
+    path: "{{ terraform_workdir }}"
     state: directory
     owner: "{{ ansible_env.USER }}"
     group: "{{ ansible_env.USER }}"
@@ -18,7 +18,7 @@
 - name: install terraform binary
   unarchive:
     src: "{{ terraform_url }}"
-    dest: "{{ terrafom_work }}"
+    dest: "{{ terraform_workdir }}"
     mode: 0755
     remote_src: yes
 
@@ -39,12 +39,12 @@
   when: not {{ build_libvirt_provider | default(false) }}
 
 - name: build libvirt provider if required
-  include: containerd.yml
-  when: {{ build_libvirt_provider | default(false) }}
+  include: build_libvirt_provider.yml
+  when: "{{ build_libvirt_provider | default(false) }}"
 
 - name: create images directory
   file:
-    path: "{{ terrafom_work }}/images"
+    path: "{{ terraform_workdir }}/images"
     state: directory
     owner: "{{ ansible_env.USER }}"
     group: "{{ ansible_env.USER }}"
@@ -53,8 +53,8 @@
 - name: download vm base image
   get_url:
     url: "{{ vm_image_url }}"
-    dest: "{{ terrafom_work }}/images/{{ vm_image_url | basename }}"
+    dest: "{{ terraform_workdir }}/images/{{ vm_image_url | basename }}"
     checksum: "sha256:{{ vm_image_sha256 }}"
 
 - name: resize vm image
-  command: qemu-img resize "{{ terrafom_work }}/images/{{ vm_image_url | basename }}" 20G
+  command: qemu-img resize "{{ terraform_workdir }}/images/{{ vm_image_url | basename }}" 20G

@@ -8,14 +8,14 @@
 - name: copy modules
   copy:
     src: "{{ role_path }}/files/modules"
-    dest: "{{ terraform_work }}"
+    dest: "{{ terraform_workdir }}"
     mode: 0755
   tags: vm_create
 
 - name: generate main.tf
   template:
     src: main.tf.j2
-    dest: "{{ terraform_work }}/main.tf"
+    dest: "{{ terraform_workdir }}/main.tf"
     mode: 0644
   tags: vm_create
 
@@ -49,8 +49,8 @@
 
 - name: setup vm
   terraform:
-    project_path: "{{ terraform_work }}"
-    binary_path: "{{ terraform_work }}/terraform"
+    project_path: "{{ terraform_workdir }}"
+    binary_path: "{{ terraform_workdir }}/terraform"
     state: present
     force_init: true
   tags: vm_create
@@ -58,7 +58,7 @@
 - name: get vm ips
   shell: "set -o pipefail; ./terraform output -json | jq 'map_values(.value[0])'"
   args:
-    chdir: "{{ terraform_work }}"
+    chdir: "{{ terraform_workdir }}"
   changed_when: False
   register: host_ips_out
 
@@ -87,6 +87,7 @@
     group: "{{ ansible_env.USER }}"
     mode: '0700'
   delegate_to: 127.0.0.1
+  when: ssh_proxy_command is not defined
 
 - name: create ssh config file
   template:
@@ -94,3 +95,4 @@
     dest: "{{ ansible_env.HOME }}/.ssh/conf.d/kube_hosts"
     mode: '0600'
   delegate_to: 127.0.0.1
+  when: ssh_proxy_command is not defined
