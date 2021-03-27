@@ -3,9 +3,6 @@
   dnf:
     name: "*"
     state: latest # noqa package-latest
-  tags:
-    - never
-    - update_packages
 
 - name: update boot kernel to latest one
   command: grubby --set-default-index=0 # noqa no-changed-when
