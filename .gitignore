@@ -1,3 +1,4 @@
 tf/
 vms.local.generated
 inventory/
+kubeconfig
