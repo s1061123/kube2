@@ -1,4 +1,12 @@
 ---
+- name: Insert/Update "Match User" configuration block in /etc/ssh/sshd_config
+  blockinfile:
+    path: /etc/dnf/dnf.conf
+    block: |
+      deltarpm=false
+      keepcache=true
+      fastestmirror=1
+
 - name: Upgrade all packages
   dnf:
     name: "*"
