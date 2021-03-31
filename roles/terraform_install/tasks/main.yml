@@ -36,11 +36,11 @@
     dest: "{{ ansible_env.HOME }}/.local/share/terraform/plugins/registry.terraform.io/dmacvicar/libvirt/0.6.3/linux_amd64"
     mode: 0755
     remote_src: yes
-  when: not {{ build_libvirt_provider | default(false) }}
+  when: not (build_libvirt_provider | default(false))
 
 - name: build libvirt provider if required
   include: build_libvirt_provider.yml
-  when: "{{ build_libvirt_provider | default(false) }}"
+  when: ( build_libvirt_provider ) | default(false)
 
 - name: create images directory
   file:
