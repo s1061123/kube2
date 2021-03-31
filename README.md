@@ -12,6 +12,10 @@ $ ansible-playbook -i virthost.inventory 02_setup_vm.yml
 # setup Kubernetes
 $ ansible-playbook -i vms.local.generated 03_kube_install.yml
 
+# manipulate cluster
+$ export KUBECONFIG=kubeconfig
+$ kubectl ...
+
 # teardown VMs
 $ ansible-playbook -i virthost.inventory 99_teardown_vms.yml
 

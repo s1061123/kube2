@@ -64,3 +64,13 @@
   tasks: []
   roles:
     - { role: kubectl_proxy_systemd, when: kubectl_proxy_port is undefined}
+
+- hosts: master
+  become: true
+  become_user: root
+  tasks:
+    - name: copy kube config
+      fetch:
+        src: /etc/kubernetes/admin.conf
+        dest: "{{ playbook_dir }}/kubeconfig"
+        flat: yes
