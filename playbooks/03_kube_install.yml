@@ -74,3 +74,6 @@
         src: /etc/kubernetes/admin.conf
         dest: "{{ playbook_dir }}/kubeconfig"
         flat: yes
+    - name: show message
+      debug:
+        msg: export KUBECONFIG={{ playbook_dir }}/kubeconfig loads cluster config!
