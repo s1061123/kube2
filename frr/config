@@ -1,0 +1,25 @@
+!
+frr version 7.7-dev_git
+frr defaults traditional
+hostname 3cbf17645ef1
+no ipv6 forwarding
+!
+ip route 0.0.0.0/0 192.168.122.1
+!
+interface eth0
+ ip address 192.168.122.254/24
+!
+interface net1
+ ip address 192.168.1.254/24
+!
+router bgp 64500
+ no bgp ebgp-requires-policy
+ no bgp suppress-duplicates
+ no bgp network import-check
+ neighbor 192.168.122.29 remote-as 64500
+ neighbor 192.168.122.86 remote-as 64500
+ neighbor 192.168.122.91 remote-as 64500
+!
+line vty
+!
+end
