@@ -68,14 +68,14 @@
 
 - name: Validate our inventory directory exists
   file:
-    path: "{{ playbook_dir }}/inventory/"
+    path: "{{ playbook_dir }}/../inventory/"
     state: directory
   delegate_to: 127.0.0.1
 
 - name: Build a local inventory
   template:
     src: vms.local.j2
-    dest: "{{ playbook_dir }}/inventory/vms.local.generated"
+    dest: "{{ playbook_dir }}/../inventory/vms.local.generated"
     mode: 0644
   delegate_to: 127.0.0.1
 
