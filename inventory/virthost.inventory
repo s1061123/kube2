@@ -1,0 +1,4 @@
+#virt_host ansible_connection=local
+
+[virthost]
+virt_host
