@@ -96,8 +96,10 @@
       when: container_runtime == "containerd"
     - include: crio_crun.yml
       when: container_runtime == "crio_crun"
+    - include: crio_file.yml
+      when: container_runtime != "containerd" and crio_version == "file"
     - include: crio.yml
-      when: container_runtime != "containerd"
+      when: container_runtime != "containerd" and crio_version != "file"
 
 - name: install cni plugins
   block:

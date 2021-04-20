@@ -12,13 +12,18 @@ vm_additional_pkgs:
 # - crio      (crio with cgroup-v1)
 # - crio_crun (crio with cgroup-v2)
 # note: other value makes to skip install container runtime
-#container_runtime: crio
-container_runtime: containerd
+container_runtime: crio
+#container_runtime: crio_crun
+#container_runtime: containerd
 #container_runtime: skip
 
-# crio version (you can see available version by 'dnf module list cri-o')
+# crio version (you can see available version by 'dnf module list cri-o', or specify 'file' with crio_url)
 #crio_version: "nightly"
-crio_version: "1.20"
+#crio_version: "1.20"
+crio_version: "file"
+
+# crio release URL
+crio_binary_url: "https://storage.googleapis.com/cri-o/artifacts/cri-o.amd64.v1.21.0.tar.gz"
 
 # containerd release URL
 containerd_url: "https://github.com/containerd/containerd/releases/download/v1.4.4/cri-containerd-cni-1.4.4-linux-amd64.tar.gz"
