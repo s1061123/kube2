@@ -1,5 +1,5 @@
 ---
-- name: Insert/Update "Match User" configuration block in /etc/ssh/sshd_config
+- name: Chane dnf.conf to enable fastestmirror
   blockinfile:
     path: /etc/dnf/dnf.conf
     block: |
@@ -32,7 +32,7 @@
   when: vm_additional_pkgs is defined
 
 - name: Put SELinux in permissive mode
-  when: container_runtime == "containerd"
+  when: container_runtime == "containerd" or (container_runtime == "crio" and crio_version == "file")
   block:
     - name: set selinux permissive
       selinux:
@@ -127,6 +127,7 @@
   dnf:
     name: ['kubelet{{ kube_rpm_version | default("") }}', 'kubeadm{{ kube_rpm_version | default("") }}', 'kubectl{{ kube_rpm_version | default("") }}']
     disable_excludes: kubernetes
+    disable_gpg_check: true
     state: present
 
 - name: configure cgroup-driver to systemd
