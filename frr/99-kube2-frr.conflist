@@ -1,10 +1,12 @@
 {
   "cniVersion": "0.4.0",
   "name": "kube2-frr",
+  "plugins": [{
   "type": "bridge",
   "bridge": "virbr0",
   "ipam": {
     "type": "static",
     "addresses": [{"address": "192.168.122.254/24"}]
   }
+  }]
 }
