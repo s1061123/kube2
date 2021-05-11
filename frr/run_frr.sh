@@ -5,13 +5,20 @@ if [ $(whoami) != "root" ]; then
 	exit
 fi
 
+frr_name="kube2-frr"
 frr_path="$(dirname $(readlink -f $0))"
 
-podman run -d --rm --name=kube2-frr \
+podman inspect ${frr_name} 2>/dev/null >/dev/null
+if [ $? -eq 0 ]; then
+	podman kill ${frr_name}
+	sleep 1
+fi
+
+podman run -d --rm --name=${frr_name} \
 	-v ${frr_path}/daemons:/etc/frr/daemons \
 	-v ${frr_path}/config:/config \
 	-v ${frr_path}/sysctl.conf:/etc/sysctl.conf \
-	--net=kube2-frr --privileged docker.io/frrouting/frr
+	--net=kube2-frr --privileged docker.io/frrouting/frr:v7.5.1
 podman exec kube2-frr sysctl -p
 sleep 3
 # create veth 
