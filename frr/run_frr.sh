@@ -8,6 +8,8 @@ fi
 frr_name="kube2-frr"
 frr_path="$(dirname $(readlink -f $0))"
 
+${frr_path}/gen_config.sh
+
 podman inspect ${frr_name} 2>/dev/null >/dev/null
 if [ $? -eq 0 ]; then
 	podman kill ${frr_name}
