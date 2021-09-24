@@ -1,7 +1,7 @@
 ---
 vm_image_user: fedora
-vm_image_url: https://download.fedoraproject.org/pub/fedora/linux/releases/33/Cloud/x86_64/images/Fedora-Cloud-Base-33-1.2.x86_64.qcow2
-vm_image_sha256: 7a2b3cc3bb3a92ce927e685d33efe8efd75577efbe207b267cb66f68afae7ce9
+vm_image_url: https://download.fedoraproject.org/pub/fedora/linux/releases/34/Cloud/x86_64/images/Fedora-Cloud-Base-34-1.2.x86_64.qcow2
+vm_image_sha256: b9b621b26725ba95442d9a56cbaa054784e0779a9522ec6eafff07c6e6f717ea
 
 vm_additional_pkgs:
   - "sshfs"
