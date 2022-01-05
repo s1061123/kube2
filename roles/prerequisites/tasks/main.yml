@@ -75,6 +75,13 @@
     dest: "/etc/sysctl.d/99-kubernetes-cri.conf"
     mode: 0644
 
+- name: copy sysctl file (99-kubernetes-cri.conf)
+  copy:
+    src: "{{ role_path }}/files/20-ipv6.conf"
+    dest: "/etc/sysctl.d/20-ipv6.conf"
+    mode: 0644
+  when: kube_network_stack == "dual"
+
 - name: reload sysctl
   command: sysctl --system # noqa no-changed-when
 
@@ -96,10 +103,13 @@
       when: container_runtime == "containerd"
     - include: crio_crun.yml
       when: container_runtime == "crio_crun"
+    - include: crio_kubic.yml
+      when: container_runtime == "crio_kubic"
     - include: crio_file.yml
       when: container_runtime != "containerd" and crio_version == "file"
     - include: crio.yml
       when: container_runtime != "containerd" and crio_version != "file"
+    - include: crio.yml
 
 - name: install cni plugins
   block:

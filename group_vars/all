@@ -6,6 +6,14 @@ vm_image_sha256: b9b621b26725ba95442d9a56cbaa054784e0779a9522ec6eafff07c6e6f717e
 vm_additional_pkgs:
   - "sshfs"
 
+# Kubernetes network stack
+# valid value:
+# - v4
+# - v6 only (not supported yet)
+# - dual
+kube_network_stack: v4
+#kube_network_stack: dual
+
 # What container runtime do we use?
 # valid values:
 # - containerd (cgroup-v1)

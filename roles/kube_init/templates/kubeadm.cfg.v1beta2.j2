@@ -7,6 +7,10 @@ apiServer:
     enable-admission-plugins: NodeRestriction,MutatingAdmissionWebhook,ValidatingAdmissionWebhook
 networking:
   podSubnet: {{ pod_network_cidr }}/16
+{% if kube_network_stack == "dual" %}
+  serviceSubnet: "192.167.0.0/16,fd03::/120"
+  podSubnet: "192.168.0.0/16,fd04::/64"
+{% endif %}
 {% if groups.lb is defined and groups.lb|length > 0 %}
 {% for node in groups["lb"] %}
 controlPlaneEndpoint: {{ hostvars[node]['ansible_host'] }}:6443
@@ -17,6 +21,10 @@ imageRepository: {{ k8s_image_repository }}
 {% endif %}
 {% if kube_version != "latest" %}
 kubernetesVersion: {{ kube_version }}
+{% endif %}
+{% if kube_network_stack == "dual" %}
+featureGates:
+  IPv6DualStack: true
 {% endif %}
 ---
 kind: InitConfiguration
@@ -32,3 +40,7 @@ apiVersion: kubelet.config.k8s.io/v1beta1
 cgroupDriver: systemd
 {% endif %}
 resolvConf: /run/systemd/resolve/resolv.conf
+{% if kube_network_stack == "dual" %}
+featureGates:
+  IPv6DualStack: true
+{% endif %}
