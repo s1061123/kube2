@@ -132,6 +132,7 @@
     - name: create proxy config file
       blockinfile:
         path: /etc/systemd/system/crio.service.d/http-proxy.conf
+        create: yes
         block: |
           [Service]
           Environment="HTTP_PROXY={{ container_proxy }}"
@@ -150,6 +151,7 @@
     - name: create proxy config file
       blockinfile:
         path: /etc/systemd/system/containerd.service.d/http-proxy.conf
+        create: yes
         block: |
           [Service]
           Environment="HTTP_PROXY={{ container_proxy }}"
