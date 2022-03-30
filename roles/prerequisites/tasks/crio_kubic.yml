@@ -2,8 +2,8 @@
 - name: crio install
   shell: |
     dnf -y copr enable rhcontainerbot/container-selinux;
-    curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/Fedora_34/devel:kubic:libcontainers:stable.repo;
-    curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:{{ crio_version }}.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:{{ crio_version }}/Fedora_34/devel:kubic:libcontainers:stable:cri-o:{{ crio_version }}.repo;
+    curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/Fedora_35/devel:kubic:libcontainers:stable.repo;
+    curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:{{ crio_version }}.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:{{ crio_version }}/Fedora_35/devel:kubic:libcontainers:stable:cri-o:{{ crio_version }}.repo;
     dnf -y install cri-o
 
 - name: delete cni directory once
