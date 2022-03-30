@@ -106,6 +106,9 @@
     mode: 0766
   when: container_proxy is defined
 
+- name: update CA
+  command: update-ca-trust # noqa no-changed-when
+
 - name: install container runtime
   block:
     - include: containerd.yml
