@@ -97,6 +97,15 @@
     state: present
   when: container_runtime == "crio_crun"
 
+- name: install proxy CA
+  get_url:
+    url:  "{{ container_proxy_ca_url }}"
+    dest: "/etc/pki/ca-trust/source/anchors/docker_registry_proxy.crt"
+    owner: "{{ ansible_env.USER }}"
+    group: "{{ ansible_env.USER }}"
+    mode: 0766
+  when: container_proxy is defined
+
 - name: install container runtime
   block:
     - include: containerd.yml
@@ -110,6 +119,42 @@
     - include: crio.yml
       when: container_runtime != "containerd" and crio_version != "file"
     - include: crio.yml
+
+- name: configure container registry proxy / cri-o
+  block:
+    - name: create service.d directory
+      file:
+        path: /etc/systemd/system/crio.service.d
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+    - name: create proxy config file
+      blockinfile:
+        path: /etc/systemd/system/crio.service.d/http-proxy.conf
+        block: |
+          [Service]
+          Environment="HTTP_PROXY={{ container_proxy }}"
+          Environment="HTTPS_PROXY={{ container_proxy }}"
+  when: container_proxy is defined and container_runtime != "containerd"
+
+- name: configure container registry proxy / containerd
+  block:
+    - name: create service.d directory
+      file:
+        path: /etc/systemd/system/containerd.service.d
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+    - name: create proxy config file
+      blockinfile:
+        path: /etc/systemd/system/containerd.service.d/http-proxy.conf
+        block: |
+          [Service]
+          Environment="HTTP_PROXY={{ container_proxy }}"
+          Environment="HTTPS_PROXY={{ container_proxy }}"
+  when: container_proxy is defined and container_runtime == "containerd"
 
 - name: install cni plugins
   block:

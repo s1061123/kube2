@@ -1,7 +1,7 @@
 ---
 vm_image_user: fedora
-vm_image_url: https://download.fedoraproject.org/pub/fedora/linux/releases/34/Cloud/x86_64/images/Fedora-Cloud-Base-34-1.2.x86_64.qcow2
-vm_image_sha256: b9b621b26725ba95442d9a56cbaa054784e0779a9522ec6eafff07c6e6f717ea
+vm_image_url: https://download.fedoraproject.org/pub/fedora/linux/releases/35/Cloud/x86_64/images/Fedora-Cloud-Base-35-1.2.x86_64.qcow2
+vm_image_sha256: fe84502779b3477284a8d4c86731f642ca10dd3984d2b5eccdf82630a9ca2de6
 
 vm_additional_pkgs:
   - "sshfs"
@@ -20,13 +20,20 @@ kube_network_stack: v4
 # - crio      (crio with cgroup-v1)
 # - crio_crun (crio with cgroup-v2)
 # note: other value makes to skip install container runtime
-container_runtime: crio
+container_runtime: crio_kubic
+#container_runtime: crio
 #container_runtime: crio_crun
 #container_runtime: containerd
 #container_runtime: skip
 
+# container registry http/https proxy
+# i.e. https://github.com/rpardini/docker-registry-proxy
+container_proxy: 192.168.123.254:3128
+container_proxy_ca_url: http://192.168.123.254:3128/ca.crt
+
 # crio version (you can see available version by 'dnf module list cri-o', or specify 'file' with crio_url)
-crio_version: "nightly"
+#crio_version: "nightly"
+crio_version: "1.22"
 #crio_version: "1.20"
 #crio_version: "file"
 
