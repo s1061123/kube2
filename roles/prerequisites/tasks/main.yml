@@ -99,7 +99,7 @@
 
 - name: install proxy CA
   get_url:
-    url:  "{{ container_proxy_ca_url }}"
+    url:  "{{ container_proxy }}/ca.crt"
     dest: "/etc/pki/ca-trust/source/anchors/docker_registry_proxy.crt"
     owner: "{{ ansible_env.USER }}"
     group: "{{ ansible_env.USER }}"

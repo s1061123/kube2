@@ -28,8 +28,7 @@ container_runtime: crio_kubic
 
 # container registry http/https proxy
 # i.e. https://github.com/rpardini/docker-registry-proxy
-container_proxy: 192.168.123.254:3128
-container_proxy_ca_url: http://192.168.123.254:3128/ca.crt
+container_proxy: http://192.168.123.254:3128/
 
 # crio version (you can see available version by 'dnf module list cri-o', or specify 'file' with crio_url)
 #crio_version: "nightly"
