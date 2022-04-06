@@ -140,6 +140,7 @@
           [Service]
           Environment="HTTP_PROXY={{ container_proxy }}"
           Environment="HTTPS_PROXY={{ container_proxy }}"
+          Environment="NO_PROXY={{ container_no_proxy }}"
   when: container_proxy is defined and container_runtime != "containerd"
 
 - name: configure container registry proxy / containerd
@@ -159,6 +160,7 @@
           [Service]
           Environment="HTTP_PROXY={{ container_proxy }}"
           Environment="HTTPS_PROXY={{ container_proxy }}"
+          Environment="NO_PROXY={{ container_no_proxy }}"
   when: container_proxy is defined and container_runtime == "containerd"
 
 - name: install cni plugins

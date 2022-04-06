@@ -29,6 +29,7 @@ container_runtime: crio_kubic
 # container registry http/https proxy
 # i.e. https://github.com/rpardini/docker-registry-proxy
 container_proxy: http://192.168.123.254:3128/
+container_no_proxy: quay.io,10.96.0.0/12,10.244.0.0/16
 
 # crio version (you can see available version by 'dnf module list cri-o', or specify 'file' with crio_url)
 #crio_version: "nightly"
@@ -68,7 +69,9 @@ kube_version: "latest"
 kubectl_proxy_port: 8088
 
 #ovn_image_repo: "docker.io/ovnkube/ovn-daemonset-u:latest"
-ovn_image_repo: "docker.io/nfvpe/ovn-daemonset-u:latest"
+ovn_image_repo: "ghcr.io/ovn-org/ovn-kubernetes/ovn-kube-f:master"
+#ovn_gateway_mode: "shared"
+ovn_gateway_mode: "local"
 
 # Optionally build the dmacvicar/libvirt from source
 build_libvirt_provider: false

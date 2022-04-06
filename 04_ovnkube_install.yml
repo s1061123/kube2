@@ -5,13 +5,21 @@
   tasks:
     - name: Install prerequisites
       dnf:
-        name: ["patch", "git", "openvswitch"]
+        name: ["patch", "git", "openvswitch", "python3-pip"]
         state: present
     - name: enable openvswitch
       systemd:
         name: openvswitch
         enabled: yes
         state: started
+    - name: update pip
+      pip:
+        name: pip
+        extra_args: -U --user
+    - name: Install j2cli
+      pip:
+        name: j2cli
+        extra_args: --user
 
 - hosts: master
   roles:
