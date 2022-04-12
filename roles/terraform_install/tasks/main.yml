@@ -22,26 +22,6 @@
     mode: 0755
     remote_src: yes
 
-- name: create terraform libvirt provider directory
-  file:
-    path: "{{ ansible_env.HOME }}/.local/share/terraform/plugins/registry.terraform.io/dmacvicar/libvirt/0.6.3/linux_amd64"
-    state: directory
-    owner: "{{ ansible_env.USER }}"
-    group: "{{ ansible_env.USER }}"
-    mode: 0755
-
-- name: install terraform libvirt provider
-  unarchive:
-    src: "{{ terraform_libvirt_url }}"
-    dest: "{{ ansible_env.HOME }}/.local/share/terraform/plugins/registry.terraform.io/dmacvicar/libvirt/0.6.3/linux_amd64"
-    mode: 0755
-    remote_src: yes
-  when: not (build_libvirt_provider | default(false))
-
-- name: build libvirt provider if required
-  include: build_libvirt_provider.yml
-  when: ( build_libvirt_provider ) | default(false)
-
 - name: create images directory
   file:
     path: "{{ terraform_workdir }}/images"
@@ -50,11 +30,18 @@
     group: "{{ ansible_env.USER }}"
     mode: 0755
 
-- name: download vm base image
+- name: download vm base image (with sha256)
   get_url:
     url: "{{ vm_image_url }}"
     dest: "{{ terraform_workdir }}/images/{{ vm_image_url | basename }}"
     checksum: "sha256:{{ vm_image_sha256 }}"
+  when: vm_image_sha256 != "skip"
+
+- name: download vm base image
+  get_url:
+    url: "{{ vm_image_url }}"
+    dest: "{{ terraform_workdir }}/images/{{ vm_image_url | basename }}"
+  when: vm_image_sha256 == "skip"
 
 - name: resize vm image
   command: qemu-img resize "{{ terraform_workdir }}/images/{{ vm_image_url | basename }}" 20G

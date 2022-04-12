@@ -1,4 +1,5 @@
 ---
+# install crio from dnf module
 - name: enable crio module
   command: dnf -y module enable cri-o:{{ crio_version }} # noqa no-changed-when
 

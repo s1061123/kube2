@@ -44,5 +44,4 @@ virtual_machines_unused: # kinds of comment out
     eth1_ip: 10.1.1.3
 
 # terraform release url
-terraform_url: https://releases.hashicorp.com/terraform/0.14.7/terraform_0.14.7_linux_amd64.zip
-terraform_libvirt_url: https://github.com/dmacvicar/terraform-provider-libvirt/releases/download/v0.6.3/terraform-provider-libvirt-0.6.3+git.1604843676.67f4f2aa.Fedora_32.x86_64.tar.gz
+terraform_url: https://releases.hashicorp.com/terraform/1.1.8/terraform_1.1.8_linux_amd64.zip

@@ -1,8 +1,15 @@
 ---
 vm_image_user: fedora
-vm_image_url: https://download.fedoraproject.org/pub/fedora/linux/releases/35/Cloud/x86_64/images/Fedora-Cloud-Base-35-1.2.x86_64.qcow2
-vm_image_sha256: fe84502779b3477284a8d4c86731f642ca10dd3984d2b5eccdf82630a9ca2de6
+# Use official fedora cloud image
+#vm_image_url: https://download.fedoraproject.org/pub/fedora/linux/releases/35/Cloud/x86_64/images/Fedora-Cloud-Base-35-1.2.x86_64.qcow2
+#vm_image_sha256: fe84502779b3477284a8d4c86731f642ca10dd3984d2b5eccdf82630a9ca2de6
+# or you may get nightly build from koji to acceralate deploy (to skip 'dnf update')
+# http://koji.fedoraproject.org/koji/tasks?start=0&state=all&view=flat&method=createImage&order=-id
+# you can specify 'skip' to ignore checksum sha256
+vm_image_url: https://kojipkgs.fedoraproject.org//work/tasks/8665/85428665/Fedora-Cloud-Base-35-20220410.0.x86_64.qcow2
+vm_image_sha256: skip
 
+# additional package you want to install nodes
 vm_additional_pkgs:
   - "sshfs"
 
@@ -18,6 +25,7 @@ kube_network_stack: v4
 # valid values:
 # - containerd (cgroup-v1)
 # - crio      (crio with cgroup-v1)
+# - crio_kubic(crio with cgroup-v1, installed from kubic)
 # - crio_crun (crio with cgroup-v2)
 # note: other value makes to skip install container runtime
 container_runtime: crio_kubic
@@ -28,12 +36,13 @@ container_runtime: crio_kubic
 
 # container registry http/https proxy
 # i.e. https://github.com/rpardini/docker-registry-proxy
-container_proxy: http://192.168.123.254:3128/
-container_no_proxy: quay.io,10.96.0.0/12,10.244.0.0/16
+#container_proxy: http://192.168.123.254:3128/
+# container_no_proxy should include k8s service cidr and pod ip cidr
+#container_no_proxy: quay.io,10.96.0.0/12,10.244.0.0/16
 
-# crio version (you can see available version by 'dnf module list cri-o', or specify 'file' with crio_url)
+# crio version (you can see available version by 'dnf module list cri-o', or specify 'file' to install crio from crio_binary_url)
 #crio_version: "nightly"
-crio_version: "1.22"
+crio_version: "1.23"
 #crio_version: "1.20"
 #crio_version: "file"
 
