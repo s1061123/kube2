@@ -47,7 +47,7 @@ crio_version: "1.23"
 #crio_version: "file"
 
 # crio release URL
-crio_binary_url: "https://storage.googleapis.com/cri-o/artifacts/cri-o.amd64.v1.21.0.tar.gz"
+crio_binary_url: "https://storage.googleapis.com/cri-o/artifacts/cri-o.amd64.c0b2474b80fd0844b883729bda88961bed7b472b.tar.gz"
 
 # containerd release URL
 containerd_url: "https://github.com/containerd/containerd/releases/download/v1.4.4/cri-containerd-cni-1.4.4-linux-amd64.tar.gz"
