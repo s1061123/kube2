@@ -1,0 +1,46 @@
+# Full parameters @ https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-init/
+# for v1.13 (https://godoc.org/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta1)
+kind: ClusterConfiguration
+apiVersion: kubeadm.k8s.io/v1beta3
+apiServer:
+networking:
+{% if kube_network_stack == "dual" %}
+  serviceSubnet: "192.167.0.0/16,fd03::/120"
+  podSubnet: "192.168.0.0/16,fd04::/64"
+{% else %}
+  podSubnet: {{ pod_network_cidr }}/16
+{% endif %}
+{% if groups.lb is defined and groups.lb|length > 0 %}
+{% for node in groups["lb"] %}
+controlPlaneEndpoint: {{ hostvars[node]['ansible_host'] }}:6443
+{% endfor %}
+{% endif %}
+{% if k8s_image_repository|default("") != "" %}
+imageRepository: {{ k8s_image_repository }}
+{% endif %}
+{% if kube_version != "latest" %}
+kubernetesVersion: {{ kube_version }}
+{% endif %}
+{% if kube_network_stack == "dual" %}
+featureGates:
+  IPv6DualStack: true
+{% endif %}
+---
+kind: InitConfiguration
+apiVersion: kubeadm.k8s.io/v1beta3
+{% if container_runtime == "crio" %}
+nodeRegistration:
+  criSocket: unix:///var/run/crio/crio.sock
+{% endif %}
+---
+# see https://pkg.go.dev/k8s.io/kubelet/config/v1beta1#KubeletConfiguration for the detail
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta3
+{% if container_runtime == "crio" %}
+cgroupDriver: systemd
+{% endif %}
+resolvConf: /run/systemd/resolve/resolv.conf
+{% if kube_network_stack == "dual" %}
+featureGates:
+  IPv6DualStack: true
+{% endif %}

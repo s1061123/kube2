@@ -26,12 +26,11 @@
         kubeadm version -o json | jq -r .clientVersion.minor | sed -e 's/\+//g'
       register: kubeadm_version_minor
 
-    - name: create kubeadm config file (>= 1.16)
+    - name: create kubeadm config file
       template:
-        src: kubeadm.cfg.v1beta2.j2
+        src: kubeadm.cfg.v1beta3.j2
         dest: /root/kubeadm.cfg
         mode: 0644
-      when: kubeadm_version_minor.stdout|int >= 16
 
 - name: Default cri-o flags to empty
   set_fact:
