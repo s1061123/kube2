@@ -6,7 +6,7 @@ vm_image_user: fedora
 # or you may get nightly build from koji to acceralate deploy (to skip 'dnf update')
 # http://koji.fedoraproject.org/koji/tasks?start=0&state=all&view=flat&method=createImage&order=-id
 # you can specify 'skip' to ignore checksum sha256
-vm_image_url: https://kojipkgs.fedoraproject.org//work/tasks/8665/85428665/Fedora-Cloud-Base-35-20220410.0.x86_64.qcow2
+vm_image_url: https://kojipkgs.fedoraproject.org//work/tasks/7819/85857819/Fedora-Cloud-Base-36-20220418.n.0.x86_64.qcow2
 vm_image_sha256: skip
 
 # additional package you want to install nodes

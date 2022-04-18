@@ -4,7 +4,7 @@ network_type: 2nics
 #terraform_workdir: "{{ ansible_env.HOME }}/tf"
 terraform_workdir: "{{ playbook_dir }}/tf"
 
-default_ram_mb: 16384
+default_ram_mb: 8192
 default_cpus: 4
 
 ssh_pub_key: ~/.ssh/id_rsa.pub
@@ -18,12 +18,12 @@ ssh_private_key: ~/.ssh/id_rsa
 virtual_machines:
   - name: kube-master1
     node_type: master
-    cpus: 8
-    memory: 32768
+#    cpus: 8
+#    memory: 32768
     eth1_ip: 10.1.1.1
   - name: kube-node-1
-    cpus: 4
     node_type: nodes
+    memory: 4096
 virtual_machines_unused: # kinds of comment out
   - name: kube-node-2
     cpus: 4
