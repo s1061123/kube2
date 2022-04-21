@@ -50,7 +50,7 @@ resource "libvirt_domain" "vm-node" {
   memory = var.memory
   vcpu = var.vcpu
 
-  cpu = {
+  cpu {
     mode = "host-passthrough"
   }
 
