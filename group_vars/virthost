@@ -44,4 +44,4 @@ virtual_machines_unused: # kinds of comment out
     eth1_ip: 10.1.1.3
 
 # terraform release url
-terraform_url: https://releases.hashicorp.com/terraform/1.1.8/terraform_1.1.8_linux_amd64.zip
+terraform_url: https://releases.hashicorp.com/terraform/1.1.9/terraform_1.1.9_linux_amd64.zip
