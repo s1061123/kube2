@@ -7,7 +7,6 @@ vm_image_user: fedora
 # http://koji.fedoraproject.org/koji/tasks?start=0&state=all&view=flat&method=createImage&order=-id
 # or https://koji.fedoraproject.org/koji/search?terms=Fedora-Cloud-Base-36*&type=build&match=regexp
 # you can specify 'skip' to ignore checksum sha256
-vm_image_url: https://kojipkgs.fedoraproject.org//work/tasks/2081/85962081/Fedora-Cloud-Base-36-20220420.n.0.x86_64.qcow2
 vm_image_url: https://kojipkgs.fedoraproject.org//packages/Fedora-Cloud-Base/36/20220506.n.0/images/Fedora-Cloud-Base-36-20220506.n.0.x86_64.qcow2
 vm_image_sha256: skip
 
