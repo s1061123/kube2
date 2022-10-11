@@ -14,3 +14,7 @@
 - hosts: virthost
   roles:
    - role: terraform_install
+
+- hosts: virthost
+  roles:
+   - role: download_vm_image

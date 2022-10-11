@@ -30,18 +30,3 @@
     group: "{{ ansible_env.USER }}"
     mode: 0755
 
-- name: download vm base image (with sha256)
-  get_url:
-    url: "{{ vm_image_url }}"
-    dest: "{{ terraform_workdir }}/images/{{ vm_image_url | basename }}"
-    checksum: "sha256:{{ vm_image_sha256 }}"
-  when: vm_image_sha256 != "skip"
-
-- name: download vm base image
-  get_url:
-    url: "{{ vm_image_url }}"
-    dest: "{{ terraform_workdir }}/images/{{ vm_image_url | basename }}"
-  when: vm_image_sha256 == "skip"
-
-- name: resize vm image
-  command: qemu-img resize "{{ terraform_workdir }}/images/{{ vm_image_url | basename }}" 20G
