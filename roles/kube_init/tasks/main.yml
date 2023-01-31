@@ -56,7 +56,7 @@
 
 - name: Run kubeadm init
   shell: >
-    kubeadm init {{ k8s_version }} {{ arg_crio }} {{ k8s_upload_certs }} --config=/root/kubeadm.cfg > /var/log/kubeadm.init.log
+    kubeadm init {{ k8s_version }} {{ arg_crio }} {{ k8s_upload_certs }} {{ kubeadm_flags | default("") }} --config=/root/kubeadm.cfg > /var/log/kubeadm.init.log
   args:
     creates: /etc/.kubeadm-complete
 

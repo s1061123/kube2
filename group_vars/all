@@ -76,6 +76,9 @@ kube_version: "latest"
 # Default: "" (use latest)
 #kube_rpm_version: "-1.19.9-0"
 
+# kubeadm additional flags
+#kubeadm_flags: "--skip-phases=addon/kube-proxy"
+
 # Kubectl proxy.
 kubectl_proxy_port: 8088
 
