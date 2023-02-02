@@ -2,3 +2,4 @@ tf/
 vms.local.generated
 inventory/
 kubeconfig
+roles/ansible-role-libvirt-host/

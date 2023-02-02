@@ -21,7 +21,12 @@ $ kubectl ...
 # teardown VMs
 $ ansible-playbook -i inventory/virthost.inventory 99_teardown_vms.yml
 
-# (if you setup VMs again)
+# (if you want to use another VM image)
+$ vi group_vars/all
+<modify vm_image_url>
+$ ansible-playbook -i inventory/virthost.inventory 01a_download_vm_image.yml
+
+# (if you setup VMs again, with new VM image)
 $ ansible-playbook -i inventory/virthost.inventory 02_setup_vm.yml
 ...
 ```

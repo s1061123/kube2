@@ -1,0 +1,4 @@
+# install libvirt
+- hosts: virthost
+  roles:
+   - role: download_vm_image
