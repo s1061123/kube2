@@ -46,6 +46,16 @@ The virthost is assumed to be a Fedora machine.
 
 For details see the [using a remote virthost](docs/remote-virthost.md) document.
 
-## Building the libvirt provider from source
 
-You may set the `build_libvirt_provider` variable to true to build the libvirt provider from source. If you are not using the latest Fedora, this may be necessary.
+## Troubleshooting hint
+
+### Manually test vm setup
+
+You may want to see what's happen in vm setup error. If you already invoked `02_setup_vm.yml` once, then you can manually run terraform to setup VMs and see error message directly.
+
+```
+% cd tf
+% ./terraform apply  -auto-approve
+
+% ./terraform destroy -auto-approve
+```

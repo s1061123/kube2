@@ -52,6 +52,7 @@
     project_path: "{{ terraform_workdir }}"
     binary_path: "{{ terraform_workdir }}/terraform"
     state: present
+    parallelism: 20
     force_init: true
   tags: vm_create
 
