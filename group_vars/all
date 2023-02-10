@@ -31,7 +31,7 @@ kube_network_stack: v4
 # - crio_file (crio from release tar ball)
 # - crio_crun (crio with cgroup-v2)
 # note: other value makes to skip install container runtime
-container_runtime: crio_rpm
+container_runtime: crio_kubic
 
 #container_runtime: containerd
 #container_runtime: crio_crun
@@ -57,7 +57,7 @@ crio_version: "1.26"
 #crio_version: "file"
 
 # crio rpm file path
-crio_rpm_file: "/home/foobar/src/quick-k8s-rpms/RPMS/x86_64/cri-o-test-1.fc37.x86_64.rpm"
+#crio_rpm_file: "/home/foobar/src/quick-k8s-rpms/RPMS/x86_64/cri-o-test-1.fc37.x86_64.rpm"
 
 # crio kubic repo file URL
 crio_kubic_repo:  "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/1.26:/1.26.1/Fedora_37/devel:kubic:libcontainers:stable:cri-o:1.26:1.26.1.repo"
@@ -79,15 +79,15 @@ cni_plugins_url: "https://github.com/containernetworking/plugins/releases/downlo
 # kube_version: 1.7.5-0
 # The default is... "latest"
 # if kube_version is "rpm", directly install rpms from kube_rpm_path
-kube_version: "rpm"
+kube_version: "latest"
 
 # specify RPM directory for kubernetes (if kube_version: "rpm")
 # there must be kubeadm, kubectl, kubelet RPM packages
-kube_rpm_path: "/home/foobar/src/quick-k8s-rpms/RPMS/x86_64"
+#kube_rpm_path: "/home/foobar/src/quick-k8s-rpms/RPMS/x86_64"
 
 # specify kubernetes image repository and image version
-kube_image_repository: "quay.io/foobar"
-kube_image_version: "v1.27.0-alpha"
+#kube_image_repository: "quay.io/foobar"
+#kube_image_version: "v1.27.0-alpha"
 
 
 # Kube RPM Version (i.e. suffix of RPM package)
