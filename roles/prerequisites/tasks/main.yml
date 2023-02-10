@@ -158,9 +158,11 @@
     - include: crio_kubic.yml
       when: container_runtime == "crio_kubic"
     - include: crio_file.yml
-      when: container_runtime == "crio" and crio_version == "file"
-    - include: crio.yml
-      when: container_runtime == "crio" and crio_version != "file"
+      when: container_runtime == "crio_file"
+    - include: crio_rpm.yml
+      when: container_runtime == "crio_rpm"
+    - include: crio_dnf.yml
+      when: container_runtime == "crio_dnf"
 
 - name: install cni plugins
   block:

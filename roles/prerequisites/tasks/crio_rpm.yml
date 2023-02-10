@@ -1,10 +1,17 @@
 ---
+- name: copy RPM file
+  copy:
+    src: "{{ crio_rpm_file }}"
+    dest: /root/{{ crio_rpm_file | basename }}
+    owner: root
+    group: root
+    mode: 0644
+
 - name: crio install
   shell: |
     dnf -y copr enable rhcontainerbot/container-selinux;
     curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/Fedora_37/devel:kubic:libcontainers:stable.repo;
-    curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:{{ crio_version }}.repo {{ crio_kubic_repo }}
-    dnf -y install cri-o
+    dnf install -y /root/{{ crio_rpm_file | basename }}
 
 - name: delete cni directory once
   file:

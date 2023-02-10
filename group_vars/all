@@ -25,15 +25,20 @@ kube_network_stack: v4
 # What container runtime do we use?
 # valid values:
 # - containerd (cgroup-v1)
-# - crio      (crio with cgroup-v1)
+# - crio_dnf  (crio with cgroup-v1, by dnf command)
 # - crio_kubic(crio with cgroup-v1, installed from kubic)
+# - crio_rpm  (crio from rpm file)
+# - crio_file (crio from release tar ball)
 # - crio_crun (crio with cgroup-v2)
 # note: other value makes to skip install container runtime
-container_runtime: crio_kubic
+container_runtime: crio_rpm
 
-#container_runtime: crio
-#container_runtime: crio_crun
 #container_runtime: containerd
+#container_runtime: crio_crun
+#container_runtime: crio_dnf
+#container_runtime: crio_file
+#container_runtime: crio_kubic
+#container_runtime: crio_rpm
 #container_runtime: skip
 
 # container registry http/https proxy
@@ -42,14 +47,23 @@ container_runtime: crio_kubic
 # container_no_proxy should include k8s service cidr and pod ip cidr
 #container_no_proxy: quay.io,10.96.0.0/12,10.244.0.0/16
 
-# crio version (you can see available version by 'dnf module list cri-o', or specify 'file' to install crio from crio_binary_url)
+# crio version (in case of 'container_runtime: crio_dnf' 'crio_kubic')
+# note: you can see available version by
+#  - 'dnf module list cri-o' (for crio_dnf)
+#  - https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/ (for crio_kubic)
 #crio_version: "nightly"
 crio_version: "1.26"
 #crio_version: "1.20"
 #crio_version: "file"
 
-# crio release URL
-crio_binary_url: "https://storage.googleapis.com/cri-o/artifacts/cri-o.amd64.c0b2474b80fd0844b883729bda88961bed7b472b.tar.gz"
+# crio rpm file path
+crio_rpm_file: "/home/foobar/src/quick-k8s-rpms/RPMS/x86_64/cri-o-test-1.fc37.x86_64.rpm"
+
+# crio kubic repo file URL
+crio_kubic_repo:  "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/1.26:/1.26.1/Fedora_37/devel:kubic:libcontainers:stable:cri-o:1.26:1.26.1.repo"
+
+# crio release URL (in case of 'container_runtime: crio_file')
+crio_file_url: "https://storage.googleapis.com/cri-o/artifacts/cri-o.amd64.c0b2474b80fd0844b883729bda88961bed7b472b.tar.gz"
 
 # containerd release URL
 containerd_url: "https://github.com/containerd/containerd/releases/download/v1.6.6/cri-containerd-cni-1.6.6-linux-amd64.tar.gz"

@@ -28,7 +28,7 @@
         - /usr/local/lib/systemd/system
     - name: Extract cri-o
       unarchive:
-        src: "{{ crio_binary_url }}"
+        src: "{{ crio_file_url }}"
         dest: ${HOME}/src
         mode: 0755
         remote_src: yes
