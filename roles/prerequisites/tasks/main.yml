@@ -151,17 +151,17 @@
 
 - name: install container runtime
   block:
-    - include: containerd.yml
+    - import_tasks: containerd.yml
       when: container_runtime == "containerd"
-    - include: crio_crun.yml
+    - import_tasks: crio_crun.yml
       when: container_runtime == "crio_crun"
-    - include: crio_kubic.yml
+    - import_tasks: crio_kubic.yml
       when: container_runtime == "crio_kubic"
-    - include: crio_file.yml
+    - import_tasks: crio_file.yml
       when: container_runtime == "crio_file"
-    - include: crio_rpm.yml
+    - import_tasks: crio_rpm.yml
       when: container_runtime == "crio_rpm"
-    - include: crio_dnf.yml
+    - import_tasks: crio_dnf.yml
       when: container_runtime == "crio_dnf"
 
 - name: install cni plugins
@@ -180,18 +180,12 @@
         mode: 0755
         remote_src: yes
 
-- name: copy kubernetes.repo
-  copy:
-    src: "{{ role_path }}/files/kubernetes.repo"
-    dest: "/etc/yum.repos.d/kubernetes.repo"
-    mode: 0644
-
-- name: install kubernetes packages
-  dnf:
-    name: ['kubelet{{ kube_rpm_version | default("") }}', 'kubeadm{{ kube_rpm_version | default("") }}', 'kubectl{{ kube_rpm_version | default("") }}']
-    disable_excludes: kubernetes
-    disable_gpg_check: true
-    state: present
+- name: install container runtime
+  block:
+    - import_tasks: kubernetes_rpm.yml
+      when: kube_version == "rpm"
+    - import_tasks: kubernetes.yml
+      when: kube_version != "rpm"
 
 - name: configure cgroup-driver to systemd
   lineinfile: >-

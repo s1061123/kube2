@@ -71,9 +71,6 @@ containerd_url: "https://github.com/containerd/containerd/releases/download/v1.6
 # CNI reference plugin URL
 cni_plugins_url: "https://github.com/containernetworking/plugins/releases/download/v0.9.1/cni-plugins-linux-amd64-v0.9.1.tgz"
 
-# Pod net work CIDR
-pod_network_cidr: "10.244.0.0"
-
 # Kube Version
 # Accepts "latest" or the version part of an RPM (typically based on the kubelet RPM).
 # For example if you were to look at `yum search kubelet --showduplicates`
@@ -81,7 +78,17 @@ pod_network_cidr: "10.244.0.0"
 # You'd use "1.7.5-0" here, such as:
 # kube_version: 1.7.5-0
 # The default is... "latest"
-kube_version: "latest"
+# if kube_version is "rpm", directly install rpms from kube_rpm_path
+kube_version: "rpm"
+
+# specify RPM directory for kubernetes (if kube_version: "rpm")
+# there must be kubeadm, kubectl, kubelet RPM packages
+kube_rpm_path: "/home/foobar/src/quick-k8s-rpms/RPMS/x86_64"
+
+# specify kubernetes image repository and image version
+kube_image_repository: "quay.io/foobar"
+kube_image_version: "v1.27.0-alpha"
+
 
 # Kube RPM Version (i.e. suffix of RPM package)
 # Accepts "" (for latest) or the version part of an RPM (typically based on the kubelet RPM).
@@ -95,6 +102,9 @@ kube_version: "latest"
 
 # Kubectl proxy.
 kubectl_proxy_port: 8088
+
+# Pod network CIDR
+pod_network_cidr: "10.244.0.0"
 
 #ovn_image_repo: "docker.io/ovnkube/ovn-daemonset-u:latest"
 ovn_image_repo: "ghcr.io/ovn-org/ovn-kubernetes/ovn-kube-f:master"

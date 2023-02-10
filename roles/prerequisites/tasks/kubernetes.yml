@@ -1,0 +1,13 @@
+---
+- name: copy kubernetes.repo
+  copy:
+    src: "{{ role_path }}/files/kubernetes.repo"
+    dest: "/etc/yum.repos.d/kubernetes.repo"
+    mode: 0644
+
+- name: install kubernetes packages
+  dnf:
+    name: ['kubelet{{ kube_rpm_version | default("") }}', 'kubeadm{{ kube_rpm_version | default("") }}', 'kubectl{{ kube_rpm_version | default("") }}']
+    disable_excludes: kubernetes
+    disable_gpg_check: true
+    state: present

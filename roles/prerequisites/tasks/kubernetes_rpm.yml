@@ -1,0 +1,16 @@
+---
+- name: copy kube RPM
+  copy:
+    src: "{{ item }}"
+    dest: "/root/{{ item | basename }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_fileglob:
+    - "{{ kube_rpm_path }}/kubeadm*"
+    - "{{ kube_rpm_path }}/kubectl*"
+    - "{{ kube_rpm_path }}/kubelet*"
+
+- name: install RPMs
+  shell: |
+    dnf install -y /root/kubeadm*rpm /root/kubectl*rpm /root/kubelet*rpm

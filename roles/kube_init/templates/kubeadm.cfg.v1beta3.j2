@@ -15,11 +15,11 @@ networking:
 controlPlaneEndpoint: {{ hostvars[node]['ansible_host'] }}:6443
 {% endfor %}
 {% endif %}
-{% if k8s_image_repository|default("") != "" %}
-imageRepository: {{ k8s_image_repository }}
+{% if kube_image_repository|default("") != "" %}
+imageRepository: {{ kube_image_repository }}
 {% endif %}
-{% if kube_version != "latest" %}
-kubernetesVersion: {{ kube_version }}
+{% if kube_image_version|default("") != "" %}
+kubernetesVersion: {{ kube_image_version }}
 {% endif %}
 {% if kube_network_stack == "dual" %}
 featureGates:
