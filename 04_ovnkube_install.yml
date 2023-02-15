@@ -7,11 +7,12 @@
       dnf:
         name: ["patch", "git", "openvswitch", "python3-pip"]
         state: present
-    - name: enable openvswitch
-      systemd:
-        name: openvswitch
-        enabled: yes
-        state: started
+    # Current ovn-kuberntes release does not work with host openvswitch.
+#    - name: enable openvswitch
+#      systemd:
+#        name: openvswitch
+#        enabled: yes
+#        state: started
     - name: update pip
       pip:
         name: pip
