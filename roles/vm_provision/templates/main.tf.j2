@@ -23,7 +23,10 @@ resource "libvirt_network" "multus_eth1" {
 {% for node in virtual_machines %}
 {% set vm_type = "vm_simple" %}
 {% if network_type is defined and network_type == "2nics" %}
-  {% set vm_type = "vm_2nics_ip" %}
+  {% set vm_type = "vm_2nics" %}
+  {% if ceph_volume is defined %}
+    {% set vm_type = "vm_2nics_ceph" %}
+  {% endif %}
 {% endif %}
 
 module "{{ node['name'] }}" {

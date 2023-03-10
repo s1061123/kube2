@@ -1,6 +1,9 @@
 # Network type (2nics or default)
 network_type: 2nics
 
+# Add ceph volume (i.e. additional hdd) in vm
+#ceph_volume: true
+
 #terraform_workdir: "{{ ansible_env.HOME }}/tf"
 terraform_workdir: "{{ playbook_dir }}/tf"
 
