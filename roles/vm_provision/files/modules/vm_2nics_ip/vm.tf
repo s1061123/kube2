@@ -11,7 +11,10 @@ variable memory {}
 variable vcpu {}
 variable user {}
 variable ssh_pub_key {}
-variable eth1_addr {}
+variable eth1_addr {
+  type = list
+  default = null
+}
 variable base_image {}
 
 resource "libvirt_volume" "image-node" {
@@ -61,7 +64,7 @@ resource "libvirt_domain" "vm-node" {
 
   network_interface {
     network_name = "multus_eth1"
-    addresses = [ var.eth1_addr ]
+    addresses = var.eth1_addr
   }
 
   console {

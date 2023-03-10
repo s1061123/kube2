@@ -23,11 +23,7 @@ resource "libvirt_network" "multus_eth1" {
 {% for node in virtual_machines %}
 {% set vm_type = "vm_simple" %}
 {% if network_type is defined and network_type == "2nics" %}
-  {% if node['eth1_ip'] is defined %}
-    {% set vm_type = "vm_2nics_ip" %}
-  {% else %}
-    {% set vm_type = "vm_2nics" %}
-  {% endif %}
+  {% set vm_type = "vm_2nics_ip" %}
 {% endif %}
 
 module "{{ node['name'] }}" {
@@ -47,8 +43,8 @@ module "{{ node['name'] }}" {
   base_image = "images/{{ vm_image_url | basename }}"
   user = "{{ vm_image_user }}"
   ssh_pub_key = file("{{ ssh_pub_key }}")
-{% if vm_type == "vm_2nics_ip" %}
-  eth1_addr = "{{ node['eth1_ip'] }}"
+{% if 'eth1_ip' in node %}
+  eth1_addr = [ "{{ node['eth1_ip'] }}" ]
 {% endif %}
 }
 
