@@ -1,8 +1,9 @@
-# Network type (2nics or default)
-network_type: 2nics
-
-# Add ceph volume (i.e. additional hdd) in vm
-#ceph_volume: true
+# Libvirt vm deploy type (see vm_provision/files/modules for the details)
+# - vm_simple(default)
+# - vm_2nics
+# - vm_2nics_ceph
+# - vm_3nics_bond_ceph
+vm_deploy_type: vm_3nics_bond_ceph
 
 #terraform_workdir: "{{ ansible_env.HOME }}/tf"
 terraform_workdir: "{{ playbook_dir }}/tf"
@@ -27,10 +28,10 @@ virtual_machines:
   - name: kube-node-1
     node_type: nodes
     memory: 4096
-virtual_machines_unused: # kinds of comment out
   - name: kube-node-2
-    cpus: 4
+    memory: 4096
     node_type: nodes
+virtual_machines_unused: # kinds of comment out
   - name: kube-lb
     cpus: 2
     node_type: lb

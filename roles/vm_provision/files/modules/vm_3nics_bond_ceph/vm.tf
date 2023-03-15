@@ -51,6 +51,18 @@ resource "libvirt_cloudinit_disk" "ci-node" {
         sudo: ALL=(ALL) NOPASSWD:ALL
         ssh_authorized_keys:
           - ${var.ssh_pub_key}
+    runcmd:
+      - nmcli connection delete 'Wired connection 1'
+      - nmcli connection delete 'Wired connection 2'
+      - nmcli connection add type bond autoconnect no con-name bond0 ifname bond0 mode balance-rr ipv4.method disabled ipv6.method link-local
+      - nmcli connection add type bond-slave autoconnect no ifname eth1 master bond0 ethernet.cloned-mac-address random
+      - nmcli connection add type bond-slave autoconnect no ifname eth2 master bond0 ethernet.cloned-mac-address random
+      - nmcli connection modify bond-slave-eth1 connection.autoconnect yes
+      - nmcli connection modify bond-slave-eth2 connection.autoconnect yes
+      - nmcli connection modify bond0 connection.autoconnect yes
+      - nmcli connection up bond-slave-eth1
+      - nmcli connection up bond-slave-eth2
+      - nmcli connection up bond0
   EOS
 }
 
@@ -73,7 +85,10 @@ resource "libvirt_domain" "vm-node" {
 
   network_interface {
     network_name = "multus_eth1"
-    addresses = var.eth1_addr
+  }
+
+  network_interface {
+    network_name = "multus_eth1"
   }
 
   console {

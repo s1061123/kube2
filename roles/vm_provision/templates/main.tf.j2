@@ -10,7 +10,7 @@ provider "libvirt" {
   uri = "qemu:///system"
 }
 
-{% if network_type is defined and network_type == "2nics" %}
+{% if vm_deploy_type is defined and vm_deploy_type != "vm_simple" %}
 // if 2nic is defined
 resource "libvirt_network" "multus_eth1" {
   name = "multus_eth1"
@@ -21,17 +21,10 @@ resource "libvirt_network" "multus_eth1" {
 }
 {% endif %}
 {% for node in virtual_machines %}
-{% set vm_type = "vm_simple" %}
-{% if network_type is defined and network_type == "2nics" %}
-  {% set vm_type = "vm_2nics" %}
-  {% if ceph_volume is defined %}
-    {% set vm_type = "vm_2nics_ceph" %}
-  {% endif %}
-{% endif %}
 
 module "{{ node['name'] }}" {
   // fallthrough (1nic)
-  source   = "./modules/{{ vm_type }}"
+  source   = "./modules/{{ vm_deploy_type | default("vm_simple") }}"
   name = "{{ node['name'] }}"
 {% if node['cpus'] is defined %}
   vcpu = {{ node['cpus'] }}
@@ -46,7 +39,7 @@ module "{{ node['name'] }}" {
   base_image = "images/{{ vm_image_url | basename }}"
   user = "{{ vm_image_user }}"
   ssh_pub_key = file("{{ ssh_pub_key }}")
-{% if 'eth1_ip' in node %}
+{% if 'eth1_ip' in node and vm_deploy_type != "vm_3nics_bond_ceph" %}
   eth1_addr = [ "{{ node['eth1_ip'] }}" ]
 {% endif %}
 }
