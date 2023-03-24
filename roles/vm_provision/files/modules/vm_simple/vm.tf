@@ -15,7 +15,7 @@ variable base_image {}
 
 resource "libvirt_volume" "image-node" {
   name = "${var.name}.img"
-  source = base_image
+  source = var.base_image
 }
 
 resource "libvirt_cloudinit_disk" "ci-node" {
