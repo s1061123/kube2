@@ -10,6 +10,9 @@ vm_image_sha256: b5b9bec91eee65489a5745f6ee620573b23337cbb1eb4501ce200b157a01f3a
 #vm_image_url:  https://kojipkgs.fedoraproject.org//work/tasks/7307/97297307/Fedora-Cloud-Base-37-20230209.0.x86_64.qcow2
 #vm_image_sha256: skip
 
+vm_network_name: "multus_eth1"
+vm_network_cidr: "10.1.1.0/24"
+
 # additional package you want to install nodes
 vm_additional_pkgs:
   - "sshfs"
