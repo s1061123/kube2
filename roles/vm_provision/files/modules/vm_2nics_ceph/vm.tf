@@ -11,6 +11,7 @@ variable memory {}
 variable vcpu {}
 variable user {}
 variable ssh_pub_key {}
+variable network_name {}
 variable eth1_addr {
   type = list
   default = null
@@ -72,7 +73,7 @@ resource "libvirt_domain" "vm-node" {
   }
 
   network_interface {
-    network_name = "multus_eth1"
+    network_name = "{$var.network_name}"
     addresses = var.eth1_addr
   }
 

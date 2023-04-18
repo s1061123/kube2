@@ -12,12 +12,12 @@ provider "libvirt" {
 
 {% if vm_deploy_type is defined and vm_deploy_type != "vm_simple" %}
 // if 2nic is defined
-resource "libvirt_network" "multus_eth1" {
-  name = "multus_eth1"
+resource "libvirt_network" "{{ vm_network_name }}" {
+  name = "{{ vm_network_name }}"
 
   # mode can be: "nat" (default), "none", "route", "bridge"
   mode = "none"
-  addresses = ["10.1.1.0/24"]
+  addresses = ["{{ vm_network_cidr }}"]
 }
 {% endif %}
 {% for node in virtual_machines %}
@@ -42,6 +42,7 @@ module "{{ node['name'] }}" {
 {% if 'eth1_ip' in node and vm_deploy_type != "vm_3nics_bond_ceph" %}
   eth1_addr = [ "{{ node['eth1_ip'] }}" ]
 {% endif %}
+  network_name = "{{ vm_network_name }}"
 }
 
 output "{{ node['name'] }}" {
