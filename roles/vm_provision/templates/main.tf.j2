@@ -18,6 +18,7 @@ resource "libvirt_network" "{{ vm_network_name }}" {
   # mode can be: "nat" (default), "none", "route", "bridge"
   mode = "none"
   addresses = ["{{ vm_network_cidr }}"]
+  autostart = true
 }
 {% endif %}
 {% for node in virtual_machines %}
