@@ -1,13 +1,15 @@
 {% for grouper, list in virtual_machines|groupby('node_type') %}
 {% for server in list %}
-{{ server.name }} ansible_host={{ host_ips[server.name] }}
+{% set vm_name = (vm_name_prefix | default("")) +  server.name %}
+{{ vm_name }} ansible_host={{ host_ips[vm_name] }}
 {% endfor %}
 {% endfor %}
 
 {% for grouper, list in virtual_machines|groupby('node_type') %}
 [{{ grouper }}]
 {% for server in list %}
-{{ server.name }}
+{% set vm_name = (vm_name_prefix | default("")) +  server.name %}
+{{ vm_name }}
 {% endfor %}
 
 {% endfor %}

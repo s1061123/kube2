@@ -3,7 +3,10 @@
 # - vm_2nics
 # - vm_2nics_ceph
 # - vm_3nics_bond_ceph
-vm_deploy_type: vm_3nics_bond_ceph
+vm_deploy_type: vm_2nics
+
+#(optional) prefix for VM name for multi kube2 instance in a machine
+#vm_name_prefix: "p2-"
 
 #terraform_workdir: "{{ ansible_env.HOME }}/tf"
 terraform_workdir: "{{ playbook_dir }}/tf"

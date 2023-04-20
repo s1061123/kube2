@@ -23,10 +23,11 @@ resource "libvirt_network" "{{ vm_network_name }}" {
 {% endif %}
 {% for node in virtual_machines %}
 
-module "{{ node['name'] }}" {
+{% set vm_name = (vm_name_prefix | default("")) +  node['name'] %}
+module "{{ vm_name }}" {
   // fallthrough (1nic)
   source   = "./modules/{{ vm_deploy_type | default("vm_simple") }}"
-  name = "{{ node['name'] }}"
+  name = "{{ vm_name }}"
 {% if node['cpus'] is defined %}
   vcpu = {{ node['cpus'] }}
 {% else %}
@@ -46,7 +47,7 @@ module "{{ node['name'] }}" {
   network_name = "{{ vm_network_name }}"
 }
 
-output "{{ node['name'] }}" {
-  value = flatten(module.{{ node['name'] }}.ips)
+output "{{ vm_name }}" {
+  value = flatten(module.{{ vm_name }}.ips)
 }
 {% endfor %}
