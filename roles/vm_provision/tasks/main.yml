@@ -93,7 +93,7 @@
 - name: create ssh config file
   template:
     src: kube_hosts.j2
-    dest: "{{ ansible_env.HOME }}/.ssh/conf.d/kube_hosts"
+    dest: "{{ ansible_env.HOME }}/.ssh/conf.d/{{ vm_name_prefix | default('') }}kube_hosts"
     mode: '0600'
   delegate_to: 127.0.0.1
   when: ssh_proxy_command is not defined
