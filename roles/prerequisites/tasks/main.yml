@@ -54,6 +54,14 @@
 - name: disable swap
   command: swapoff -a # noqa no-changed-when
 
+- name: install nftable iptables
+  dnf:
+    name: iptables-utils,iptables-nft
+    state: present
+
+- name: switch nftable iptables
+  command: alternatives --set iptables /usr/sbin/iptables-nft # noqa no-changed-when
+
 - name: change cgroup to v1
   command: grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0" # noqa no-changed-when
   when: container_runtime != "crio_crun"
@@ -153,16 +161,14 @@
   block:
     - import_tasks: containerd.yml
       when: container_runtime == "containerd"
-    - import_tasks: crio_crun.yml
-      when: container_runtime == "crio_crun"
-    - import_tasks: crio_kubic.yml
-      when: container_runtime == "crio_kubic"
+#    - import_tasks: crio_crun.yml
+#      when: container_runtime == "crio_crun"
     - import_tasks: crio_file.yml
       when: container_runtime == "crio_file"
     - import_tasks: crio_rpm.yml
       when: container_runtime == "crio_rpm"
-    - import_tasks: crio_dnf.yml
-      when: container_runtime == "crio_dnf"
+    - import_tasks: crio_k8s.yml
+      when: container_runtime == "crio_k8s"
 
 - name: install cni plugins
   block:

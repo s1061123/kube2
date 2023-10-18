@@ -7,7 +7,7 @@ vm_image_sha256: d334670401ff3d5b4129fcc662cf64f5a6e568228af59076cc449a494531848
 # or you may get nightly build from koji to acceralate deploy (to skip 'dnf update')
 # http://koji.fedoraproject.org/koji/tasks?start=0&state=all&view=flat&method=createImage&order=-id
 # you can specify 'skip' to ignore checksum sha256
-#vm_image_url:  https://kojipkgs.fedoraproject.org//work/tasks/7307/97297307/Fedora-Cloud-Base-37-20230209.0.x86_64.qcow2
+#vm_image_url: https://kojipkgs.fedoraproject.org//work/tasks/1715/107691715/Fedora-Cloud-Base-38-20231018.0.x86_64.qcow2
 #vm_image_sha256: skip
 
 vm_network_name: "multus_eth1"
@@ -28,19 +28,15 @@ kube_network_stack: v4
 # What container runtime do we use?
 # valid values:
 # - containerd (cgroup-v1)
-# - crio_dnf  (crio with cgroup-v1, by dnf command)
-# - crio_kubic(crio with cgroup-v1, installed from kubic)
 # - crio_rpm  (crio from rpm file)
 # - crio_file (crio from release tar ball)
 # - crio_crun (crio with cgroup-v2)
 # note: other value makes to skip install container runtime
-container_runtime: crio_kubic
+container_runtime: crio_k8s
 
 #container_runtime: containerd
 #container_runtime: crio_crun
-#container_runtime: crio_dnf
 #container_runtime: crio_file
-#container_runtime: crio_kubic
 #container_runtime: crio_rpm
 #container_runtime: skip
 
@@ -50,20 +46,14 @@ container_runtime: crio_kubic
 # container_no_proxy should include k8s service cidr and pod ip cidr
 #container_no_proxy: quay.io,10.96.0.0/12,10.244.0.0/16
 
-# crio version (in case of 'container_runtime: crio_dnf' 'crio_kubic')
-# note: you can see available version by
-#  - 'dnf module list cri-o' (for crio_dnf)
-#  - https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/ (for crio_kubic)
+# crio version (in case of 'container_runtime: crio_k8s') TODO
 #crio_version: "nightly"
-crio_version: "1.26"
+#crio_version: "1.26"
 #crio_version: "1.20"
 #crio_version: "file"
 
 # crio rpm file path
 #crio_rpm_file: "/home/foobar/src/quick-k8s-rpms/RPMS/x86_64/cri-o-test-1.fc37.x86_64.rpm"
-
-# crio kubic repo file URL
-crio_kubic_repo:  "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/1.26:/1.26.1/Fedora_37/devel:kubic:libcontainers:stable:cri-o:1.26:1.26.1.repo"
 
 # crio release URL (in case of 'container_runtime: crio_file')
 crio_file_url: "https://storage.googleapis.com/cri-o/artifacts/cri-o.amd64.c0b2474b80fd0844b883729bda88961bed7b472b.tar.gz"
@@ -74,15 +64,8 @@ containerd_url: "https://github.com/containerd/containerd/releases/download/v1.6
 # CNI reference plugin URL
 cni_plugins_url: "https://github.com/containernetworking/plugins/releases/download/v0.9.1/cni-plugins-linux-amd64-v0.9.1.tgz"
 
-# Kube Version
-# Accepts "latest" or the version part of an RPM (typically based on the kubelet RPM).
-# For example if you were to look at `yum search kubelet --showduplicates`
-# You'd see things like "kubelet-1.7.5-0.x86_64"
-# You'd use "1.7.5-0" here, such as:
-# kube_version: 1.7.5-0
-# The default is... "latest"
-# if kube_version is "rpm", directly install rpms from kube_rpm_path
-kube_version: "latest"
+# Kube Version (used for kubernetes.repo)
+kube_version: "v1.28"
 
 # specify RPM directory for kubernetes (if kube_version: "rpm")
 # there must be kubeadm, kubectl, kubelet RPM packages
@@ -91,7 +74,6 @@ kube_version: "latest"
 # specify kubernetes image repository and image version
 #kube_image_repository: "quay.io/foobar"
 #kube_image_version: "v1.27.0-alpha"
-
 
 # Kube RPM Version (i.e. suffix of RPM package)
 # Accepts "" (for latest) or the version part of an RPM (typically based on the kubelet RPM).
@@ -113,6 +95,3 @@ pod_network_cidr: "10.244.0.0"
 ovn_image_repo: "ghcr.io/ovn-org/ovn-kubernetes/ovn-kube-f:master"
 #ovn_gateway_mode: "shared"
 ovn_gateway_mode: "local"
-
-# Optionally build the dmacvicar/libvirt from source
-build_libvirt_provider: false
