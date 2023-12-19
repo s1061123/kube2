@@ -4,4 +4,4 @@ collections:
 
 roles:
 - src: https://github.com/stackhpc/ansible-role-libvirt-host
-  version: v1.8.0
+  version: v1.12.1
