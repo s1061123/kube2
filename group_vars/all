@@ -31,6 +31,7 @@ kube_network_stack: v4
 # - crio_rpm  (crio from rpm file)
 # - crio_file (crio from release tar ball)
 # - crio_crun (crio with cgroup-v2)
+# - crio_k8s  (crio from k8s repo/default)
 # note: other value makes to skip install container runtime
 container_runtime: crio_k8s
 
@@ -62,7 +63,7 @@ crio_file_url: "https://storage.googleapis.com/cri-o/artifacts/cri-o.amd64.c0b24
 containerd_url: "https://github.com/containerd/containerd/releases/download/v1.6.6/cri-containerd-cni-1.6.6-linux-amd64.tar.gz"
 
 # CNI reference plugin URL
-cni_plugins_url: "https://github.com/containernetworking/plugins/releases/download/v0.9.1/cni-plugins-linux-amd64-v0.9.1.tgz"
+cni_plugins_url: "https://github.com/containernetworking/plugins/releases/download/v1.4.0/cni-plugins-linux-amd64-v1.4.0.tgz"
 
 # Kube Version (used for kubernetes.repo)
 kube_version: "v1.28"

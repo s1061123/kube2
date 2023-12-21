@@ -1,6 +1,7 @@
 # Libvirt vm deploy type (see vm_provision/files/modules for the details)
 # - vm_simple(default)
 # - vm_2nics
+# - vm_2nics_rawdisk
 # - vm_2nics_ceph
 # - vm_3nics_bond_ceph
 vm_deploy_type: vm_2nics

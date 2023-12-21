@@ -38,7 +38,11 @@ module "{{ vm_name }}" {
 {% else %}
   memory = {{ default_ram_mb }}
 {% endif %}
+{% if vm_deploy_type == "vm_2nics_rawdisk" %}
+  block_device = "{{ node['block_device'] }}"
+{% else %}
   base_image = "images/{{ vm_image_url | basename }}"
+{% endif %}
   user = "{{ vm_image_user }}"
   ssh_pub_key = file("{{ ssh_pub_key }}")
 {% if 'eth1_ip' in node and vm_deploy_type != "vm_3nics_bond_ceph" %}
