@@ -47,13 +47,7 @@ container_runtime: crio_k8s
 # container_no_proxy should include k8s service cidr and pod ip cidr
 #container_no_proxy: quay.io,10.96.0.0/12,10.244.0.0/16
 
-# crio version (in case of 'container_runtime: crio_k8s') TODO
-#crio_version: "nightly"
-#crio_version: "1.26"
-#crio_version: "1.20"
-#crio_version: "file"
-
-# crio rpm file path
+# crio rpm file path (in case of crio_rpm)
 #crio_rpm_file: "/home/foobar/src/quick-k8s-rpms/RPMS/x86_64/cri-o-test-1.fc37.x86_64.rpm"
 
 # crio release URL (in case of 'container_runtime: crio_file')
@@ -65,7 +59,7 @@ containerd_url: "https://github.com/containerd/containerd/releases/download/v1.6
 # CNI reference plugin URL
 cni_plugins_url: "https://github.com/containernetworking/plugins/releases/download/v1.4.0/cni-plugins-linux-amd64-v1.4.0.tgz"
 
-# Kube Version (used for kubernetes.repo)
+# Kube Version (used for kubernetes.repo as well as crio.repo/crio_k8s)
 kube_version: "v1.29"
 
 # specify RPM directory for kubernetes (if kube_version: "rpm")
