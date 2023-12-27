@@ -62,14 +62,16 @@
 - name: switch nftable iptables
   command: alternatives --set iptables /usr/sbin/iptables-nft # noqa no-changed-when
 
-- name: change cgroup to v1
-  command: grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0" # noqa no-changed-when
-  when: container_runtime != "crio_crun"
+# v1.29 supports cgroupv2, hence it is no longer required (this will be removed soon)
+#
+#- name: change cgroup to v1
+#  command: grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0" # noqa no-changed-when
+#  when: container_runtime != "crio_crun"
 
-- name: reboot vm
-  reboot:
-    reboot_timeout: 600
-  when: container_runtime != "crio_crun"
+#- name: reboot vm
+#  reboot:
+#    reboot_timeout: 600
+#  when: container_runtime != "crio_crun"
 
 - name: copy sysctl file (k8s.conf)
   copy:

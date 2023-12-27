@@ -1,13 +1,13 @@
 ---
 vm_image_user: fedora
 # Use official fedora cloud image
-vm_image_url: https://download.fedoraproject.org/pub/fedora/linux/releases/38/Cloud/x86_64/images/Fedora-Cloud-Base-38-1.6.x86_64.qcow2
-vm_image_sha256: d334670401ff3d5b4129fcc662cf64f5a6e568228af59076cc449a4945318482
+vm_image_url: https://download.fedoraproject.org/pub/fedora/linux/releases/39/Cloud/x86_64/images/Fedora-Cloud-Base-39-1.5.x86_64.qcow2
+vm_image_sha256: ab5be5058c5c839528a7d6373934e0ce5ad6c8f80bd71ed3390032027da52f37
 
 # or you may get nightly build from koji to acceralate deploy (to skip 'dnf update')
 # http://koji.fedoraproject.org/koji/tasks?start=0&state=all&view=flat&method=createImage&order=-id
 # you can specify 'skip' to ignore checksum sha256
-#vm_image_url: https://kojipkgs.fedoraproject.org//work/tasks/1715/107691715/Fedora-Cloud-Base-38-20231018.0.x86_64.qcow2
+#vm_image_url: https://kojipkgs.fedoraproject.org//work/tasks/2087/110862087/Fedora-Cloud-Base-39-20231226.0.x86_64.qcow2
 #vm_image_sha256: skip
 
 vm_network_name: "multus_eth1"
@@ -66,7 +66,7 @@ containerd_url: "https://github.com/containerd/containerd/releases/download/v1.6
 cni_plugins_url: "https://github.com/containernetworking/plugins/releases/download/v1.4.0/cni-plugins-linux-amd64-v1.4.0.tgz"
 
 # Kube Version (used for kubernetes.repo)
-kube_version: "v1.28"
+kube_version: "v1.29"
 
 # specify RPM directory for kubernetes (if kube_version: "rpm")
 # there must be kubeadm, kubectl, kubelet RPM packages

@@ -1,8 +1,8 @@
 ---
 # install crio from k8s repo
 - name: copy cri-o.repo
-  copy:
-    src: "{{ role_path }}/files/cri-o.repo"
+  template:
+    src: "cri-o.repo.j2"
     dest: "/etc/yum.repos.d/cri-o.repo"
     mode: 0644
 
