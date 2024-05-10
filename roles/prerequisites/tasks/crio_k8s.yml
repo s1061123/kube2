@@ -8,7 +8,7 @@
 
 - name: install cri-o dependencies
   dnf:
-    name: conntrack,container-selinux,ebtables,iptables,ethtool,socat
+    name: conntrack,container-selinux,ethtool,socat
     state: present
 
 - name: install cri-o packages

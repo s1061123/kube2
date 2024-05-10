@@ -1,8 +1,8 @@
 ---
 vm_image_user: fedora
 # Use official fedora cloud image
-vm_image_url: https://download.fedoraproject.org/pub/fedora/linux/releases/39/Cloud/x86_64/images/Fedora-Cloud-Base-39-1.5.x86_64.qcow2
-vm_image_sha256: ab5be5058c5c839528a7d6373934e0ce5ad6c8f80bd71ed3390032027da52f37
+vm_image_url: https://download.fedoraproject.org/pub/fedora/linux/releases/40/Cloud/x86_64/images/Fedora-Cloud-Base-Generic.x86_64-40-1.14.qcow2
+vm_image_sha256: ac58f3c35b73272d5986fa6d3bc44fd246b45df4c334e99a07b3bbd00684adee
 
 # or you may get nightly build from koji to acceralate deploy (to skip 'dnf update')
 # http://koji.fedoraproject.org/koji/tasks?start=0&state=all&view=flat&method=createImage&order=-id
@@ -60,7 +60,10 @@ containerd_url: "https://github.com/containerd/containerd/releases/download/v1.6
 cni_plugins_url: "https://github.com/containernetworking/plugins/releases/download/v1.4.0/cni-plugins-linux-amd64-v1.4.0.tgz"
 
 # Kube Version (used for kubernetes.repo as well as crio.repo/crio_k8s)
-kube_version: "v1.29"
+kube_version: "v1.30"
+
+#specify kube-proxy mode (iptables, nftables)
+#kube_proxy_mode: "iptables"
 
 # specify RPM directory for kubernetes (if kube_version: "rpm")
 # there must be kubeadm, kubectl, kubelet RPM packages

@@ -44,3 +44,11 @@ resolvConf: /run/systemd/resolve/resolv.conf
 featureGates:
   IPv6DualStack: true
 {% endif %}
+{% if kube_proxy_mode|default("iptables") == "nftables" %}
+---
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+kind: KubeProxyConfiguration
+featureGates:
+  NFTablesProxyMode: true
+mode: "nftables"
+{% endif %}

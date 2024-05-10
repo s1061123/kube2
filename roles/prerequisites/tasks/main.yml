@@ -54,13 +54,21 @@
 - name: disable swap
   command: swapoff -a # noqa no-changed-when
 
-- name: install nftable iptables
+- name: install iptables-nft
   dnf:
     name: iptables-utils,iptables-nft
     state: present
+  when: (kube_proxy_mode | default("iptables")) == "iptables"
 
-- name: switch nftable iptables
+- name: switch iptables-nft
   command: alternatives --set iptables /usr/sbin/iptables-nft # noqa no-changed-when
+  when: (kube_proxy_mode | default("iptables")) == "iptables"
+
+- name: install nftables
+  dnf:
+    name: nftables
+    state: present
+  when: (kube_proxy_mode | default("iptables")) == "nftables"
 
 # v1.29 supports cgroupv2, hence it is no longer required (this will be removed soon)
 #
@@ -78,6 +86,7 @@
     src: "{{ role_path }}/files/k8s.conf"
     dest: "/etc/sysctl.d/k8s.conf"
     mode: 0644
+  when: (kube_proxy_mode | default("iptables")) == "iptables"
 
 - name: copy sysctl file (99-kubernetes-cri.conf)
   copy:
@@ -100,6 +109,7 @@
 
 - name: load required kernel modules(br_netfilter)
   command: modprobe br_netfilter # noqa no-changed-when
+  when: (kube_proxy_mode | default("iptables")) == "iptables"
 
 - name: install crun
   dnf:
