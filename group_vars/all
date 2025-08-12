@@ -1,8 +1,8 @@
 ---
 vm_image_user: fedora
 # Use official fedora cloud image
-vm_image_url: https://download.fedoraproject.org/pub/fedora/linux/releases/40/Cloud/x86_64/images/Fedora-Cloud-Base-Generic.x86_64-40-1.14.qcow2
-vm_image_sha256: ac58f3c35b73272d5986fa6d3bc44fd246b45df4c334e99a07b3bbd00684adee
+vm_image_url: https://download.fedoraproject.org/pub/fedora/linux/releases/42/Cloud/x86_64/images/Fedora-Cloud-Base-Generic-42-1.1.x86_64.qcow2
+vm_image_sha256: e401a4db2e5e04d1967b6729774faa96da629bcf3ba90b67d8d9cce9906bec0f
 
 # or you may get nightly build from koji to acceralate deploy (to skip 'dnf update')
 # http://koji.fedoraproject.org/koji/tasks?start=0&state=all&view=flat&method=createImage&order=-id
@@ -60,7 +60,7 @@ containerd_url: "https://github.com/containerd/containerd/releases/download/v1.6
 cni_plugins_url: "https://github.com/containernetworking/plugins/releases/download/v1.4.0/cni-plugins-linux-amd64-v1.4.0.tgz"
 
 # Kube Version (used for kubernetes.repo as well as crio.repo/crio_k8s)
-kube_version: "v1.30"
+kube_version: "v1.33"
 
 #specify kube-proxy mode (iptables, nftables)
 #kube_proxy_mode: "iptables"

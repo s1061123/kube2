@@ -17,8 +17,8 @@ terraform_workdir: "{{ playbook_dir }}/tf"
 default_ram_mb: 8192
 default_cpus: 4
 
-ssh_pub_key: ~/.ssh/id_rsa.pub
-ssh_private_key: ~/.ssh/id_rsa
+ssh_pub_key: ~/.ssh/id_ed25519.pub
+ssh_private_key: ~/.ssh/id_ed25519
 
 # Define all VM's that need to be created and their respective roles.
 # There are three roles user can defined
@@ -54,4 +54,4 @@ virtual_machines_unused: # kinds of comment out
     eth1_ip: 10.1.1.3
 
 # terraform release url
-terraform_url: https://releases.hashicorp.com/terraform/1.3.8/terraform_1.3.8_linux_amd64.zip
+terraform_url: https://releases.hashicorp.com/terraform/1.12.2/terraform_1.12.2_linux_amd64.zip

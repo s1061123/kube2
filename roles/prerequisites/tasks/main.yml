@@ -50,6 +50,8 @@
   dnf:
     name: zram-generator
     state: absent
+    autoremove: true
+    allowerasing: true
 
 - name: disable swap
   command: swapoff -a # noqa no-changed-when
@@ -171,6 +173,13 @@
 
 - name: install container runtime
   block:
+    - import_tasks: kubernetes_rpm.yml
+      when: kube_version == "rpm"
+    - import_tasks: kubernetes.yml
+      when: kube_version != "rpm"
+
+- name: install container runtime
+  block:
     - import_tasks: containerd.yml
       when: container_runtime == "containerd"
 #    - import_tasks: crio_crun.yml
@@ -197,13 +206,6 @@
         dest: /opt/cni/bin
         mode: 0755
         remote_src: yes
-
-- name: install container runtime
-  block:
-    - import_tasks: kubernetes_rpm.yml
-      when: kube_version == "rpm"
-    - import_tasks: kubernetes.yml
-      when: kube_version != "rpm"
 
 - name: configure cgroup-driver to systemd
   lineinfile: >-
